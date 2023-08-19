@@ -20,7 +20,6 @@
 - [Usage](#usage)
 - [Built Using](#built_using)
 - [TODO](../TODO.md)
-- [Contributing](../CONTRIBUTING.md)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgement)
 
@@ -40,7 +39,7 @@ What things you need to install the software and how to install them.
 Add notes about how to use the system.
 
 ## 🚀 Deployment <a name = "deployment"></a>
-Add additional notes about how to deploy this on a live system.
+Will be added soon when docker container is done.
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 - [R Shiny](https://www.rstudio.com/products/shiny/) - Web application
@@ -49,6 +48,13 @@ Add additional notes about how to deploy this on a live system.
 - [Bootswatch](https://bootswatch.com/) - Cosmetics
 - [Python](https://www.python.org/) - API connector
 
+## ⛏️ TO DO <a name = "built_using"></a>
+- Fix the summarization functionality (wrong page is retrieved)
+- Improve the summarization prompt (so far just a bad prompt is embedded)
+- Adding docker container
+- Included other LLM API, maybe cohere
+- Adding chatbot functionality
+  
 ## ✍️ Authors <a name = "authors"></a>
 - [@LilianDK](https://github.com/LilianDK/llm-playground) - Idea & Initial work
 - [@mfmezger](https://github.com/mfmezger) - Supporting with the nasty Python stuff
