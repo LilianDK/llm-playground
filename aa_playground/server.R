@@ -1,15 +1,18 @@
-source("configurations/lookup.R")
 source_python("api_clients/aa_client.py")
-source_python("api_clients/aa_summarization.py")
-py_run_file(glue("{getwd()}/api_clients/aa_client.py"))
+py_run_file(glue("api_clients/aa_client.py"))
+source("configurations/lookup.R")
 
+x = getwd()
+print(x)
 server <- function(input, output,session) {
-  
+
   options(scipen=999)
   pagenumbers = 0
   # Communication with aleph alpha compute center for completion job------------
   rawoutput <- eventReactive(input$button1,{ 
+    print("Running API request.")
     
+
     prompt = input$text_prompt 
     model = input$select_model
     stop_sequences = "###"
@@ -29,8 +32,14 @@ server <- function(input, output,session) {
     return(text)
   })
   
+  output$text_prompt3 <- renderText({ 
+    rawoutput()
+  })|>
+    bindEvent(input$button1)
   # Communication with aleph alpha compute center for summary job---------------
   rawoutput2 <- eventReactive(input$button2,{
+    source_python("api_clients/aa_summarization.py")
+
     print(input$selectedPage)
     path = getwd()
     pdf_file = glue("{path}/www/0.pdf")
@@ -49,10 +58,7 @@ server <- function(input, output,session) {
                     "Parameter setting" = second_column)
   })
   
-  output$text_prompt3 <- renderText({ 
-    rawoutput()
-  })|>
-    bindEvent(input$button)
+
   
   # Tokenizer to estimate tokens -----------------------------
   output$text_prompt2 <- renderText({ 

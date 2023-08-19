@@ -1,9 +1,7 @@
 import os
 from aleph_alpha_client import Client, CompletionRequest, Prompt
+def completion(token, prompt, model, stop_sequences, maximum_tokens, best_of, temperature, top_k, top_p, presence_penalty, frequency_penalty, n):
 
-def completion(token, prompt, document):
-
-  print(prompt)
   client = Client(token)
   request = CompletionRequest(
       prompt=Prompt.from_text(prompt),
@@ -16,6 +14,11 @@ def completion(token, prompt, document):
       presence_penalty = presence_penalty,
       frequency_penalty =frequency_penalty,
   )
+  print("HUHU")
   response = client.complete(request, model = model)
+  print("WUHU")
   print(response)
+  print(response.completions[0].completion)
   return response.completions[0].completion
+
+
