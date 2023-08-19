@@ -35,7 +35,7 @@ What things you need to install the software and how to install them.
 - [Python](https://www.python.org/) - API connector
 - [Aleph Alpha](https://app.aleph-alpha.com/) - Account to get the token and budget (=loaded credits) on the accout
 
-![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Account.png)
+![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Acount.png)
 
 ## 🎈 Usage <a name="usage"></a>
 Add notes about how to use the system.
