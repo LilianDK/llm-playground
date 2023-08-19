@@ -1,18 +1,17 @@
-source_python("api_clients/aa_client.py")
-py_run_file(glue("api_clients/aa_client.py"))
 source("configurations/lookup.R")
+source_python("api_clients/aa_client.py")
+source_python("api_clients/aa_summarization.py")
+#py_run_file(glue("api_clients/aa_client.py"))
 
-x = getwd()
-print(x)
 server <- function(input, output,session) {
 
   options(scipen=999)
   pagenumbers = 0
+  
   # Communication with aleph alpha compute center for completion job------------
   rawoutput <- eventReactive(input$button1,{ 
-    print("Running API request.")
     
-
+    token = input$text_token
     prompt = input$text_prompt 
     model = input$select_model
     stop_sequences = "###"
@@ -36,10 +35,11 @@ server <- function(input, output,session) {
     rawoutput()
   })|>
     bindEvent(input$button1)
+  
   # Communication with aleph alpha compute center for summary job---------------
   rawoutput2 <- eventReactive(input$button2,{
-    source_python("api_clients/aa_summarization.py")
-
+    
+    token = input$text_token
     print(input$selectedPage)
     path = getwd()
     pdf_file = glue("{path}/www/0.pdf")
@@ -60,7 +60,7 @@ server <- function(input, output,session) {
   
 
   
-  # Tokenizer to estimate tokens -----------------------------
+  # Tokenizer to estimate tokens -----------------------------------------------
   output$text_prompt2 <- renderText({ 
     estimatedtokena = 0
     estimatedtokena = count_tokens(input$text_prompt)
@@ -70,9 +70,9 @@ server <- function(input, output,session) {
     estimatedtokenb = 0
     estimatedtokena = count_tokens(rawoutput())
   })|>
-    bindEvent(input$button)
+    bindEvent(input$button1)
   
-  # Cost calculation -----------------------------------------
+  # Cost calculation -----------------------------------------------------------
   output$text_prompt5 <- renderText({  
     input_cost = count_tokens(input$text_prompt)/1000 * model_price[input$select_model,1] * task_factor["complete",1] 
     + input$num_maxtoken/1000 * model_price[input$select_model,1] * task_factor["complete",2]
@@ -83,7 +83,7 @@ server <- function(input, output,session) {
     + count_tokens(rawoutput())/1000 * model_price[input$select_model,1] * task_factor["complete",2] 
   })
   
-  # Output report--------------------------------------------
+  # Output report---------------------------------------------------------------
   
   output$downloader <- 
     downloadHandler(
@@ -114,12 +114,12 @@ server <- function(input, output,session) {
         }
     )
   
-  # Descriptions --------------------------------------------
+  # Descriptions ---------------------------------------------------------------
   output$descriptions <- renderUI({           
     includeMarkdown(knitr::knit('configurations/descriptions.md'))           
   })
   
-  # PDF handling --------------------------------------------
+  # PDF handling ---------------------------------------------------------------
   # Upload PDF and display
   
   observe({
@@ -127,11 +127,6 @@ server <- function(input, output,session) {
     
     file.copy(input$file_input$datapath,"www", overwrite = T)
     filepath = input$file_input$datapath
-    
-    # Page numbers
-    output$pagenumbers = renderText({  
-      length(txt) 
-    })
     
     # Count token
     output$sumtoken = renderText({  
@@ -153,7 +148,7 @@ server <- function(input, output,session) {
       x <- sum(df[, 'tokens'])
       
     })
-    
+
     # Count cost
     output$embeddcost <- renderText({  
       pdf_file = filepath

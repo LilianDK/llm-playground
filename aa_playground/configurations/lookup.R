@@ -1,4 +1,4 @@
-# Aleph Alpha Price Table
+# Aleph Alpha Price Table-------------------------------------------------------
 model_price = matrix(c(0.006, 0.009, 0.035, 
                        0.0075, 0.01125, 0.04375
 ), ncol=1, byrow=TRUE)
