@@ -32,10 +32,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 What things you need to install the software and how to install them.
-
-```
-Give examples
-```
+- [R](https://www.r-project.org/) - Web application
+- [Python](https://www.python.org/) - API connector
+- [Aleph Alpha](https://app.aleph-alpha.com/) - Account to get the token and budget (=loaded credits) on the accout
 
 ## 🎈 Usage <a name="usage"></a>
 Add notes about how to use the system.
@@ -48,6 +47,7 @@ Add additional notes about how to deploy this on a live system.
 - [Aleph Alpha](https://www.aleph-alpha.com/) - Foundation models
 - [Jinja](https://jinja.palletsprojects.com/en/3.1.x/) - Prompts
 - [Bootswatch](https://bootswatch.com/) - Cosmetics
+- [Python](https://www.python.org/) - API connector
 
 ## ✍️ Authors <a name = "authors"></a>
 - [@LilianDK](https://github.com/LilianDK/llm-playground) - Idea & Initial work
