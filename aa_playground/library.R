@@ -16,11 +16,12 @@ library(TheOpenAIR)
 library(glue)
 library(DT)
 library(pdftools)
+library(rmarkdown)
 
 if (local_development) {
   
   # Put the path to your python environment here
-  use_python("/Users/USERNAME/.pyenv/versions/3.11.4/bin/python")
+  use_python("/Users/lilian.do-khac/.pyenv/versions/3.11.4/bin/python")
 }
 
 py_install("aleph-alpha-client")

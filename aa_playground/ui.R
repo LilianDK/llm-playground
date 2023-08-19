@@ -19,7 +19,7 @@ ui <- page_sidebar(
                    actionButton("button1", "Submit", icon("paper-plane"), style = config_button, width = "230px")
                    ),
                    column(width = 7,
-                     downloadButton(outputId = "downloader", label = "Download Prompt Report", style = config_button)
+                     downloadButton("report", "Download Prompt Report", style = config_button)
                    )
               ),
               

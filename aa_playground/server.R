@@ -85,34 +85,39 @@ server <- function(input, output,session) {
   
   # Output report---------------------------------------------------------------
   
-  output$downloader <- 
-    downloadHandler(
-      "results_from_shiny.pdf",
-      content = 
-        function(file)
-        {
-          rmarkdown::render(
-            input = "output/report.Rmd",
-            output_file = "built_report.pdf",
-            params = list(input_prompt = input$text_prompt,
-                          results = rawoutput(),
-                          model = input$select_model,
-                          max_tokens = as.integer(input$num_maxtoken),
-                          best_of = as.integer(input$slider_bestof),
-                          temperature = input$slider_temperature,
-                          top_k = as.integer(input$slider_topk),
-                          top_p = input$slider_topp,
-                          presence = input$slider_presence,
-                          frequency = input$slider_frequency,
-                          parameterframe = parameterframe()
-            )
-          ) 
-          readBin(con = "output/built_report.pdf", 
-                  what = "raw",
-                  n = file.info("output/built_report.pdf")[, "size"]) %>%
-            writeBin(con = file)
-        }
-    )
+  output$report <- downloadHandler(
+    # For PDF output, change this to "report.pdf"
+    filename = "report.pdf",
+    content = function(file) {
+      # Copy the report file to a temporary directory before processing it, in
+      # case we don't have write permissions to the current working dir (which
+      # can happen when deployed).
+      tempReport <- file.path(tempdir(), "report.Rmd")
+      file.copy("report.Rmd", tempReport, overwrite = TRUE)
+      
+      # Set up parameters to pass to Rmd document
+      params = list(input_prompt = input$text_prompt,
+                    results = rawoutput(),
+                    model = input$select_model,
+                    max_tokens = as.integer(input$num_maxtoken),
+                    best_of = as.integer(input$slider_bestof),
+                    temperature = input$slider_temperature,
+                    top_k = as.integer(input$slider_topk),
+                    top_p = input$slider_topp,
+                    presence = input$slider_presence,
+                    frequency = input$slider_frequency,
+                    parameterframe = parameterframe()
+      )
+      
+      # Knit the document, passing in the `params` list, and eval it in a
+      # child of the global environment (this isolates the code in the document
+      # from the code in this app).
+      rmarkdown::render(tempReport, output_file = file,
+                        params = params,
+                        envir = new.env(parent = globalenv())
+      )
+    }
+  )
   
   # Descriptions ---------------------------------------------------------------
   output$descriptions <- renderUI({           
