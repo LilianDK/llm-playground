@@ -1,0 +1,33 @@
+---
+title: "Prompt Report"
+output: pdf_document
+params:
+  input_prompt: 'NULL'
+  results: 'NULL'
+  model: 'NULL'
+  max_tokens: 'NULL'
+  best_of: 'NULL'
+  temperature: 'NULL'
+  top_k: 'NULL'
+  top_p: 'NULL'
+  presence: 'NULL'
+  frequency: 'NULL'
+  parameterframe: 'NULL'
+---
+
+The prompt you used:
+```{r, echo=FALSE}
+options(tinytex.verbose = TRUE)
+params$input_prompt
+```
+
+The answer you got:
+```{r, echo=FALSE}
+options(tinytex.verbose = TRUE)
+params$results
+```
+
+```{r, echo=FALSE}
+library(knitr)
+kable(params$parameterframe, caption = "Parametrization for the prompt above")
+```
