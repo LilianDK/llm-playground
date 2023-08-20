@@ -1,6 +1,8 @@
 source("configurations/lookup.R")
 source_python("api_clients/aa_client.py")
 source_python("api_clients/aa_summarization.py")
+source_python("api_clients/aa_chat.py")
+
 #py_run_file(glue("api_clients/aa_client.py"))
 
 server <- function(input, output,session) {
@@ -9,33 +11,46 @@ server <- function(input, output,session) {
   pagenumbers = 0
   
   # Communication with aleph alpha compute center for completion job------------
-  rawoutput <- eventReactive(input$button1,{ 
+
+    rawoutput <- eventReactive(input$button1,{
+      
+        if (input$switch1 == TRUE) {
+          
+          # Chat
+          token = input$text_token
+          request = input$text_prompt 
+          
+          text = chat(token, request)
+          return(text)
+
+        } else {
+          
+          # Completion
+          token = input$text_token
+          prompt = input$text_prompt 
+          model = input$select_model
+          stop_sequences = "###"
+          maximum_tokens = as.integer(input$num_maxtoken) 
+          n = as.integer(input$slider_bestof)
+          if (n == 1) { n = 2 } else {}
+          best_of = as.integer(n)
+          n = as.integer(1)
+          temperature = input$slider_temperature
+          top_k = as.integer(input$slider_topk)
+          top_p = input$slider_topp
+          presence_penalty = input$slider_presence
+          frequency_penalty = input$slider_frequency 
+          
+          text = completion(token, prompt, model, stop_sequences, maximum_tokens, best_of, temperature, top_k, top_p, presence_penalty, frequency_penalty, n)
+          return(text)
+        }
+    })
     
-    token = input$text_token
-    prompt = input$text_prompt 
-    model = input$select_model
-    stop_sequences = "###"
-    maximum_tokens = as.integer(input$num_maxtoken) 
-    n = as.integer(input$slider_bestof)
-    if (n == 1) { n = 2 } else {}
-    best_of = as.integer(n)
-    n = as.integer(1)
-    temperature = input$slider_temperature
-    top_k = as.integer(input$slider_topk)
-    top_p = input$slider_topp
-    presence_penalty = input$slider_presence
-    frequency_penalty = input$slider_frequency
-    
-    text = completion(token, prompt, model, stop_sequences, maximum_tokens, best_of, temperature, top_k, top_p, presence_penalty, frequency_penalty, n)
-    
-    return(text)
-  })
-  
-  output$text_prompt3 <- renderText({ 
-    rawoutput()
-  })|>
-    bindEvent(input$button1)
-  
+    output$text_prompt3 <- renderText({ 
+      rawoutput()
+    })|>
+      bindEvent(input$button1)
+
   # Communication with aleph alpha compute center for summary job---------------
   rawoutput2 <- eventReactive(input$button2,{
     
@@ -57,8 +72,6 @@ server <- function(input, output,session) {
     df = data.frame("Parameter name" = first_column,
                     "Parameter setting" = second_column)
   })
-  
-
   
   # Tokenizer to estimate tokens -----------------------------------------------
   output$text_prompt2 <- renderText({ 

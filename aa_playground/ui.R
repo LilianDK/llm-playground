@@ -13,6 +13,7 @@ ui <- page_sidebar(
     nav_panel(title = "Playground", 
               
               card(min_height = 100,
+                   materialSwitch(inputId = "switch1", label = "Chatmode on", status = "warning"),
                    card_header("Write your Prompt:"),
                    textAreaInput("text_prompt", "", height = "300px", width = "2000px"),
                    column(width = 7,
@@ -49,12 +50,13 @@ ui <- page_sidebar(
                    textOutput("text_prompt3")
               )),
     
+    # Main panel for parameter explanation -------------------------------------
     nav_panel(title = "Parameter Explanation", 
               htmlOutput("descriptions"),
               ),
-    
+
     # Main panel for summarization ---------------------------------------------
-    nav_panel(title = "PDF", 
+    nav_panel(title = "Summarization", 
               fluidRow(
                 column(width = 6,
                        card(min_height = 100,
@@ -84,6 +86,8 @@ ui <- page_sidebar(
                 )
               )
     )),
+  
+
   
   # Sidebar layout with input definitions --------------------------------------
   sidebar = sidebar(width = 500, title = "Settings:", 
