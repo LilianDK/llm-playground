@@ -35,10 +35,12 @@ What things you need to install the software and how to install them.
 - [Python](https://www.python.org/) - API connector
 - [Aleph Alpha](https://app.aleph-alpha.com/) - Account to get the token and budget (=loaded credits) on the accout
 
-![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Account.png)
+![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Acount.png)
 
 ## 🎈 Usage <a name="usage"></a>
-Add notes about how to use the system.
+
+https://github.com/LilianDK/llm-playground/assets/13328959/95576f84-5bc5-49b1-b9ef-175ede4287ce
+
 
 ## 🚀 Deployment <a name = "deployment"></a>
 Will be added soon when docker container is done.
