@@ -31,7 +31,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 What things you need to install the software and how to install them.
-- [R](https://www.r-project.org/) - Web application
+- [R](https://posit.co/download/rstudio-desktop/) - Web application
 - [Python](https://www.python.org/) - API connector
 - [Aleph Alpha](https://app.aleph-alpha.com/) - Account to get the token and budget (=loaded credits) on the accout
 
@@ -151,7 +151,10 @@ background: linear-gradient(90deg, rgba(6,73,140,1) 28%, rgba(21,146,227,1) 63%,
 ```
 
 ## 🚀 Deployment <a name = "deployment"></a>
-Will be added soon when docker container is done.
+Will be added soon when docker container is done. Meanwhile:
+- Have the pre-requisites installed
+- Get the reticulate working
+- Run "app.R"
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 - [R Shiny](https://www.rstudio.com/products/shiny/) - Web application
