@@ -39,7 +39,7 @@ What things you need to install the software and how to install them.
 
 ## 🎈 Usage <a name="usage"></a>
 
-https://github.com/LilianDK/llm-playground/assets/13328959/44fb8d93-649e-4825-91d6-f390a3c3b466
+https://github.com/LilianDK/llm-playground/assets/13328959/95576f84-5bc5-49b1-b9ef-175ede4287ce
 
 
 ## 🚀 Deployment <a name = "deployment"></a>
