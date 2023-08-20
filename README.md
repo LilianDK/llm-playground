@@ -37,12 +37,13 @@ What things you need to install the software and how to install them.
 
 ![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Acount.png)
 
-With reticulate there might be some tidious issues and at the end of the day we figured it is best to set use_python() in library.R:
+With reticulate there might be some tidious issues and at the end of the day we figured it is best to set use_python() in library.R. Please configure yours under "USERNAME" (or more):
 ```
 # Required if local development environment has to be set due to reticulate having issues to find the right path
 local_development = FALSE
 
-packages <- c("shiny","bslib","reticulate","TheOpenAIR","glue","DT","pdftools","knitr","rmarkdown","thematic","remotes")
+packages <- c("shiny","bslib","reticulate","TheOpenAIR","glue",
+              "DT","pdftools","knitr","rmarkdown","thematic","remotes")
 
 installed_packages <- packages %in% rownames(installed.packages())
 if (any(installed_packages == FALSE)) {
@@ -69,9 +70,6 @@ if (local_development) {
 
 py_install("aleph-alpha-client")
 py_install("Jinja2")
-
-
-
 ```
 
 ## 🎈 Usage <a name="usage"></a>
@@ -134,6 +132,22 @@ def chat(token, request):
   response = client.complete(request, model = "luminous-extended-control")
   print(response)
   return response.completions[0].completion
+```
+For changing the color scheme on the front-end two files need to be touched that are located in the "www" folder.
+
+style.R in lines 3 and 4 to change the sidebar background color and text color:
+```
+# Color configuration beside CSS elements; mix colors here = https://cssgradient.io/
+config_button = "color: #fff; background-color: #06498c; border-color: #06498c"
+config_primary = "#06498c"
+config_sidebar_text_color = "#fff"
+```
+
+style.css in line 135 to change the background color of the main interaction field:
+```
+body {
+background: linear-gradient(90deg, rgba(6,73,140,1) 28%, rgba(21,146,227,1) 63%, rgba(0,224,255,1) 100%);
+}
 ```
 
 ## 🚀 Deployment <a name = "deployment"></a>
