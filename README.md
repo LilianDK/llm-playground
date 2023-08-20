@@ -38,9 +38,11 @@ What things you need to install the software and how to install them.
 ![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Acount.png)
 
 ## 🎈 Usage <a name="usage"></a>
+The front-end allows you to use the plain playground just like in the respective account to configure and try out prompt engineering. Further, there is also a functionality that allows you uploading a PDF file for which the selected page will be summarized. Finally, there is also a basic chat functionality to chat with the world knowledge of the llm.
 
 https://github.com/LilianDK/llm-playground/assets/13328959/95576f84-5bc5-49b1-b9ef-175ede4287ce
 
+You can find the summarization and chat prompt in the "prompts" folder.
 
 ## 🚀 Deployment <a name = "deployment"></a>
 Will be added soon when docker container is done.
