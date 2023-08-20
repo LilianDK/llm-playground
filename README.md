@@ -38,7 +38,9 @@ What things you need to install the software and how to install them.
 ![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Acount.png)
 
 ## 🎈 Usage <a name="usage"></a>
-[![Watch the video]](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/Usage.mp4)
+
+https://github.com/LilianDK/llm-playground/assets/13328959/44fb8d93-649e-4825-91d6-f390a3c3b466
+
 
 ## 🚀 Deployment <a name = "deployment"></a>
 Will be added soon when docker container is done.
