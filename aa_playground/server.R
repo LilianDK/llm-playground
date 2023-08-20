@@ -50,7 +50,7 @@ server <- function(input, output,session) {
   })
   
   # Logging of the parameter settings for the prompt report
-  parameterframe <- eventReactive(input$button,{ 
+  parameterframe <- eventReactive(input$button1,{ 
     first_column = c("Model","Max tokens","Best of","Temperature","Top k","Top p","Presency penalty","Frequency penalty")
     second_column = c(input$select_model,as.integer(input$num_maxtoken),as.integer(input$slider_bestof),input$slider_temperature,
                       as.integer(input$slider_topk),input$slider_topp,input$slider_presence,input$slider_frequency)
@@ -86,16 +86,14 @@ server <- function(input, output,session) {
   # Output report---------------------------------------------------------------
   
   output$report <- downloadHandler(
-    # For PDF output, change this to "report.pdf"
+
     filename = "report.pdf",
+    
     content = function(file) {
-      # Copy the report file to a temporary directory before processing it, in
-      # case we don't have write permissions to the current working dir (which
-      # can happen when deployed).
+
       tempReport <- file.path(tempdir(), "report.Rmd")
       file.copy("report.Rmd", tempReport, overwrite = TRUE)
-      
-      # Set up parameters to pass to Rmd document
+
       params = list(input_prompt = input$text_prompt,
                     results = rawoutput(),
                     model = input$select_model,
@@ -109,9 +107,6 @@ server <- function(input, output,session) {
                     parameterframe = parameterframe()
       )
       
-      # Knit the document, passing in the `params` list, and eval it in a
-      # child of the global environment (this isolates the code in the document
-      # from the code in this app).
       rmarkdown::render(tempReport, output_file = file,
                         params = params,
                         envir = new.env(parent = globalenv())

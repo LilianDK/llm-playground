@@ -2,17 +2,17 @@
 title: "Prompt Report"
 output: pdf_document
 params:
-  input_prompt: 'NULL'
-  results: 'NULL'
-  model: 'NULL'
-  max_tokens: 'NULL'
-  best_of: 'NULL'
-  temperature: 'NULL'
-  top_k: 'NULL'
-  top_p: 'NULL'
-  presence: 'NULL'
-  frequency: 'NULL'
-  parameterframe: 'NULL'
+  input_prompt: NA
+  results: NA
+  model: NA
+  max_tokens: NA
+  best_of: NA
+  temperature: NA
+  top_k: NA
+  top_p: NA
+  presence: NA
+  frequency: NA
+  parameterframe: NA
 ---
 
 The prompt you used:
