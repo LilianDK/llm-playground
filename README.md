@@ -164,7 +164,6 @@ Will be added soon when docker container is done. Meanwhile:
 - [Python](https://www.python.org/) - API connector
 
 ## ⛏️ TO DO <a name = "built_using"></a>
-- Fix the summarization functionality (wrong page is retrieved)
 - Improve the summarization prompt (so far just a bad prompt is embedded)
 - Adding docker container
 - Included other LLM API, maybe cohere
