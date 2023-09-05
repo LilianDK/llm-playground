@@ -2,6 +2,7 @@ source("configurations/lookup.R")
 source_python("api_clients/aa_client.py")
 source_python("api_clients/aa_summarization.py")
 source_python("api_clients/aa_chat.py")
+source_python("api_clients/aa_qna.py")
 
 #py_run_file(glue("api_clients/aa_client.py"))
 
@@ -72,6 +73,90 @@ server <- function(input, output,session) {
     df = data.frame("Parameter name" = first_column,
                     "Parameter setting" = second_column)
   })
+  
+  # Communication with aleph alpha compute center for qna job-------------------
+  rawoutput9 <- eventReactive(input$button5,{
+
+      token = input$text_token
+      query = input$text_prompt10 
+      
+      # Data pre-processing step: Parsing PDF input to input format for semantic search
+      pdf_file = "www/0.pdf"
+      txt = pdf_text(pdf_file)
+      #document = txt[1]
+      
+      df = data.frame(matrix(nrow = 0, ncol = 0)) 
+      for (x in 1:nrow(as.data.frame(txt))) {
+        newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) # chunk after each paragraph
+        newrows['page'] <- x # add page number
+        colnames(newrows) = colnames(df)
+        df = rbind(df, newrows)
+      } 
+      
+      colnames(df) <- c("Text_chunk","page")
+      
+      df = df[!(is.na(df$Text_chunk) | df$Text_chunk==""), ]
+      text_chunks = as.list(df)
+      
+      # Semantic search
+      #query = "Wieviel Euro muss soll die Beklagte zahlen?"
+      index = semanticsearch(token, text_chunks$Text_chunk, query, as.integer(3)) # 3 austasuchen mit variable von frontend
+      
+      # Data post-processing step: Transform LLM result to expected tabular output format
+      tbl = data.frame(matrix(nrow = 0, ncol = 0)) 
+      
+      for (x in 1:length(index)-1) {
+        newvalue = as.integer(index[x]$item())
+        tbl = rbind(tbl,newvalue)
+      } 
+      
+      vector = as.matrix(tbl[1])
+      
+      results = df[vector,]
+      
+      string = ""
+      for (x in 1:nrow(results)) {
+        string = glue("{string}{results[x,1]}")
+      }
+      
+      string = trimws(gsub("[\r\n]", "", string))
+      
+      qna = qna(token, string, query)
+      
+      return(list(
+        val1 = qna,
+        val2 = results
+      ))
+
+  })
+  
+  output$text_prompt11 <- renderText({ 
+    result = rawoutput9()
+    result = result$val1
+    #localization = result[[1]]
+    #score = result[[2]]
+    nlg = trimws(result[[4]])
+    return(nlg)
+  })|>
+    bindEvent(input$button5)
+  
+  output$text_prompt12 <- renderText({ 
+    result = rawoutput9()
+    result = result$val1
+    localization = result[[1]]
+    #score = result[[2]]
+    #nlg = trimws(result[[4]])
+    return(localization)
+  })|>
+    bindEvent(input$button5)
+  
+  output$explain_score <- renderDT({ 
+    result = rawoutput9()
+    result = result$val2
+  }, 
+  rownames=FALSE,
+  options = list(dom = 't'))|>
+    bindEvent(input$button5)
   
   # Tokenizer to estimate tokens -----------------------------------------------
   output$text_prompt2 <- renderText({ 
@@ -203,9 +288,11 @@ server <- function(input, output,session) {
         df = rbind(df, tupel)
       } 
       
-      df = df[-1,]
+      df = df[-1,c(1,2)]
       df
-    })
+    }, 
+    rownames=FALSE,
+    options = list(dom = 't'))
     
     output$summary <- renderText({ 
       rawoutput2()
@@ -213,4 +300,13 @@ server <- function(input, output,session) {
       bindEvent(input$button2)
     
   })
+  
+  observe({
+    req(input$file_input2)
+    
+  output$pdfview2 = renderUI({
+    tags$iframe(style="height:800px; width:100%", src="0.pdf")
+  })
+  })
+  
 }

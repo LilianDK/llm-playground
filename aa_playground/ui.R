@@ -58,14 +58,14 @@ ui <- page_sidebar(
     # Main panel for summarization ---------------------------------------------
     nav_panel(title = "Summarization", 
               fluidRow(
-                column(width = 6,
+                column(width = 8,
                        card(min_height = 100,
                             card_header("PDF:"),
                             uiOutput("pdfview"),
                             fileInput("file_input", "upload file ( . pdf format only)", accept = c(".pdf"))
                        )
                 ),
-                column(width = 6,
+                column(width = 4,
                        card(min_height = 100,
                             card_header("Calculation:"),
                             h6("Estimated total tokens:"),
@@ -85,9 +85,33 @@ ui <- page_sidebar(
                   
                 )
               )
+    ),
+    
+    # Main panel for Question and Answering ------------------------------------
+    nav_panel(title = "Question and Answering", 
+              fluidRow(
+                column(width = 8,
+                       card(min_height = 100,
+                            card_header("PDF:"),
+                            uiOutput("pdfview2"),
+                            fileInput("file_input2", "upload file ( . pdf format only)", accept = c(".pdf"))
+                       )
+                ),
+                column(width = 4,
+                       card(min_height = 100,
+                            h5("Machine generated answer:"),
+                            textOutput("text_prompt11"),
+                            h5("Factual source on which the answer is based:"),
+                            textOutput("text_prompt12"),
+                            h5("Top three chunks for the answer generation:"),
+                            DT::dataTableOutput("explain_score"),
+                            card_header("Your question:"),
+                            textAreaInput("text_prompt10", "", height = "50px", width = "2000px"),
+                            actionButton("button5", "Request Answer", icon("paper-plane"), style = config_button, width = "230px")
+                       )
+                )
+              )
     )),
-  
-
   
   # Sidebar layout with input definitions --------------------------------------
   sidebar = sidebar(width = 500, title = "Settings:", 
@@ -98,7 +122,7 @@ ui <- page_sidebar(
                                            textInput("text_userid", "User ID input:", value = "Enter user ID..."),
                                            passwordInput("text_token", "Token:"))),
       tags$a(href="https://app.aleph-alpha.com/", "Aleph Alpha Playground (Original)"),
-      # Input: Model selection ---------------------------
+      # Input: Model selection -------------------------------------------------
       hr(),
       selectInput("select_model", "Model:",
                   list(`First generation models` = list("luminous-base", "luminous-extended","luminous-supreme"),
@@ -107,7 +131,7 @@ ui <- page_sidebar(
       h6("Multilingual model trained on English, German, French, Spanisch, and Italian."),
       hr(),
       
-      # Input: Parameter selection -----------------------
+      # Input: Parameter selection ---------------------------------------------
       numericInput("num_maxtoken", "Maximum Tokens:", 
                    "3"),
       h6("Stop Sequence is default triple hash: ###."),
