@@ -1,0 +1,10 @@
+shiny
+shinyWidgets
+bslib
+thematic
+reticulate
+TheOpenAIR
+glue
+DT
+pdftools
+rmarkdown
