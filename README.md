@@ -30,10 +30,8 @@ So far if you have an Aleph Alpha account for example and would like to share it
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
 ### Prerequisites
-What things you need to install the software and how to install them.
-- [R](https://posit.co/download/rstudio-desktop/) - Web application
-- [Python](https://www.python.org/) - API connector
-- [Aleph Alpha](https://app.aleph-alpha.com/) - Account to get the token and budget (=loaded credits) on the accout
+What things you need to run the software:
+- [Docker](https://www.docker.com/) 
 
 ![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Acount.png)
 
