@@ -7,7 +7,7 @@ installed_packages <- packages %in% rownames(installed.packages())
 if (any(installed_packages == FALSE)) {
   install.packages(packages[!installed_packages])
 }
-remotes::install_github("dreamRs/shinyWidgets")
+# remotes::install_github("dreamRs/shinyWidgets")
 
 library(shiny)
 library(shinyWidgets)
