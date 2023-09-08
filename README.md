@@ -174,6 +174,7 @@ Will be added soon when docker container is done. Meanwhile:
 | Name    | Version | Licence |
 | -------- | ------- | ------- |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [R](https://www.r-project.org/)     | 4.3.1 | GPL-2/GPL-3 |
+| <img src="https://rstudio.github.io/renv/logo.svg" width="25"> [renv](https://rstudio.github.io/renv/articles/renv.html)     | 1.0.2 | MIT |
 | <img src="https://glue.tidyverse.org/logo.png" width="25"> [Glue](https://glue.tidyverse.org/)     | 1.6.2 | MIT |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [DT](https://cran.r-project.org/web/packages/DT/index.html)     | 0.29 | GPL-3 |
 | <img src="https://docs.ropensci.org/pdftools/logo.png" width="25"> [pdftools](https://docs.ropensci.org/pdftools/)     | 3.3.3 | MIT |
