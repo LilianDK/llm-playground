@@ -19,7 +19,8 @@
 - [Deployment](#deployment)
 - [Usage](#usage)
 - [Built Using](#built_using)
-- [TODO](../TODO.md)
+- [TODO](#todo)
+- [Licensing Overview](#licensingoverview)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgement)
 
@@ -161,14 +162,14 @@ Will be added soon when docker container is done. Meanwhile:
 - [Bootswatch](https://bootswatch.com/) - Cosmetics
 - [Python](https://www.python.org/) - API connector
 
-## ⛏️ TO DO <a name = "TO DO"></a>
+## ⛏️ TO DO <a name = "todo"></a>
 - Improve the summarization prompt (so far just a bad prompt is embedded)
 - Adding docker container
 - Included other LLM API, maybe cohere
 - Adding chatbot functionality
 - https://github.com/momper14/alephAlphaClient
 
-## ⛏️ Licensing Overview <a name = "licensing overview"></a>
+## ⛏️ Licensing Overview <a name = "licensingoverview"></a>
 
 | Name    | Version | Licence |
 | -------- | ------- | ------- |
