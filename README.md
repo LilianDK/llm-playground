@@ -82,6 +82,10 @@ https://github.com/LilianDK/llm-playground/assets/13328959/95576f84-5bc5-49b1-b9
 You can find the summarization and chat prompt in the "prompts" folder.
 
 Configuration of the summarization prompt:
+
+**token**: Identification and authorization to access Aleph Alpha API.
+**document**: Input document that shall be summarized.
+This summarization is a very simple one and is intended for rather short text input summarizations (e.g. 1 A4 page). It is not suited for long text input summarizations.
 ```
 import os
 
@@ -112,6 +116,10 @@ def summary(token, document):
 ```
 
 Configuration of the chat prompt:
+
+**token**: Identification and authorization to access Aleph Alpha API.
+**request**: Input question in natural language.
+This chat prompt is a very simple one and intended to be used to chat with the world knowledge of the foundation model.
 ```
 import os
 
@@ -134,6 +142,72 @@ def chat(token, request):
   response = client.complete(request, model = "luminous-extended-control")
   print(response)
   return response.completions[0].completion
+```
+
+Configuration of the embedding function:
+
+**token**: Identification and authorization to access Aleph Alpha API.
+**text_chunks**: Input document has been split into text chunks (e.g. per page or per paragraph etc.).
+**query**: Input question in natural language.
+**n**: Top n text_chunks output that are most similar according to cosine similarity.
+This embedding function is configured for one way information retrieval and not for chatting, which would be bi-directional.
+```
+import os
+import numpy as np
+import rpy2.robjects as robjects
+
+from aleph_alpha_client import Client
+
+from typing import Sequence
+from aleph_alpha_client import Prompt, SemanticEmbeddingRequest, SemanticRepresentation
+import math
+
+# helper function to embed text using the symmetric or asymmetric model
+def embed(client, text: str, representation: SemanticRepresentation):
+    request = SemanticEmbeddingRequest(prompt=Prompt.from_text(text), representation=representation)
+    result = client.semantic_embed(request, model="luminous-base")
+    return result.embedding
+
+# helper function to calculate the cosine similarity between two vectors
+def cosine_similarity(v1: Sequence[float], v2: Sequence[float]) -> float:
+    "compute cosine similarity of v1 to v2: (v1 dot v2)/{||v1||*||v2||)"
+    sumxx, sumxy, sumyy = 0, 0, 0
+    for i in range(len(v1)):
+        x = v1[i]; y = v2[i]
+        sumxx += x*x
+        sumyy += y*y
+        sumxy += x*y
+    return sumxy/math.sqrt(sumxx*sumyy)
+
+# helper function to print the similarity between the query and text embeddings
+def print_result(texts, query, query_embedding, text_embeddings):
+    for i, text in enumerate(texts):
+        print(f"Similarity between '{query}' and '{text[:25]}...': {cosine_similarity(query_embedding, text_embeddings[i])}")
+
+def semanticsearch(token, text_chunks, query, n):
+    client = Client(token)
+
+    asymmetric_query = embed(client, query, SemanticRepresentation.Query)
+    asymmetric_embeddings = [embed(client, text, SemanticRepresentation.Document) for text in text_chunks]
+
+    # Search for the most similar split in large_text to the query and output its index
+    results = [cosine_similarity(asymmetric_query, embedding) for embedding in asymmetric_embeddings]
+    
+    results = np.array(results)
+    
+    sorted_results = np.argsort(results)
+    
+    top_n = sorted_results[-n:]
+    
+    top_n = top_n[::-1]
+    
+    top_index = np.argmax([cosine_similarity(asymmetric_query, embedding) for embedding in asymmetric_embeddings])
+    
+    
+    print(f"The most similar split to the query is at index {top_index}:\n {text_chunks[top_index]}")
+    print(type(top_n))
+
+    return top_n
 ```
 
 ## Configuration of front-end color scheme input files <a name="configcolor"></a>
