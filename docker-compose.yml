@@ -6,4 +6,4 @@ services:
     #  - ${INPUT_DIRECTORY}:/input
     #  - ${OUTPUT_DIRECTORY}:/output
     ports:
-      - 8787:8787
+      - 3838:3838

@@ -19,12 +19,13 @@ library(glue)
 library(DT)
 library(pdftools)
 library(rmarkdown)
-
+install_python(version = "3.11:latest", list = FALSE, force = FALSE)
 if (local_development) {
   
   # Put the path to your python environment here
   use_python("/Users/USERNAME/.pyenv/versions/3.11.4/bin/python")
 }
+
 
 py_install("aleph-alpha-client")
 py_install("Jinja2")
