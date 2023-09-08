@@ -14,15 +14,17 @@
 </p>
 
 ## 📝 Table of Contents
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Deployment](#deployment)
-- [Usage](#usage)
-- [Built Using](#built_using)
-- [TODO](#todo)
-- [Licensing Overview](#licensingoverview)
-- [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
+* [About](#about)
+* [Getting Started](#getting_started)
+* [Deployment](#deployment)
+* [Usage](#usage)
+  * [Configuration of prompt input files](#configprompt)
+  * [Configuration of front-end color scheme input files](#configcolor)
+* [Built Using](#built_using)
+* [TODO](#todo)
+* [Licensing Overview](#licensingoverview)
+* [Authors](#authors)
+* [Acknowledgments](#acknowledgement)
 
 ## 🧐 About <a name = "about"></a>
 So far if you have an Aleph Alpha account for example and would like to share it in your organization with many people you would have to share the account credentials with everyone that would give too many rights to everyone. The playground however is only accessible through those extensive credentials. Therefore, this projects provides a front-end to create an abstraction and further provides some basic wrappers for LLM use cases.
@@ -76,6 +78,7 @@ The front-end allows you to use the plain playground just like in the respective
 
 https://github.com/LilianDK/llm-playground/assets/13328959/95576f84-5bc5-49b1-b9ef-175ede4287ce
 
+## Configuration of prompt input files <a name="configprompt"></a>
 You can find the summarization and chat prompt in the "prompts" folder.
 
 Configuration of the summarization prompt:
@@ -132,6 +135,8 @@ def chat(token, request):
   print(response)
   return response.completions[0].completion
 ```
+
+## Configuration of front-end color scheme input files <a name="configcolor"></a>
 For changing the color scheme on the front-end two files need to be touched that are located in the "www" folder.
 
 style.R in lines 3 and 4 to change the sidebar background color and text color:
