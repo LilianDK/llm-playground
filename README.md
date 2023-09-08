@@ -168,6 +168,7 @@ Will be added soon when docker container is done. Meanwhile:
 - Adding docker container
 - Included other LLM API, maybe cohere
 - Adding chatbot functionality
+- https://github.com/momper14/alephAlphaClient
 
 ## ⛏️ Licensing Overview <a name = "licensing overview"></a>
 
