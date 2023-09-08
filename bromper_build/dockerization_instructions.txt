@@ -1,5 +1,0 @@
-# If new packages need to be installed
-docker build -f Dockerstaging -t r-base-tidyverse .
-
-# Normal docker application
-docker build -t aa_playground .
