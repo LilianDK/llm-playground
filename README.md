@@ -191,6 +191,7 @@ Will be added soon when docker container is done. Meanwhile:
 | <img src="https://avatars.githubusercontent.com/u/61506608?s=48&v=4" width="25"> [Aleph Alpha Client](https://github.com/Aleph-Alpha/aleph-alpha-client) | 3.4.1 | MIT |
 | <img src="https://pypi.org/static/images/logo-small.2a411bc6.svg" width="25"> [Jinja2](https://pypi.org/project/Jinja2/) | 3.1.2 | BSD License (BSD-3-Clause) |
 | <img src="https://numpy.org/doc/stable/_static/numpylogo.svg" width="25"> [NumPy](https://numpy.org/doc/stable/index.html) | 1.25 | NumPy licence |
+| <img src="https://avatars.githubusercontent.com/u/5429470?s=200&v=4" width="25"> [Docker](https://github.com/docker) | 23.0.3 | Apache-2.0 |
 | <img src="https://raw.githubusercontent.com/docker/compose/main/logo.png" width="25"> [Docker Compose](https://github.com/docker/compose) | 2.21.0 | Apache-2.0 |
 
 
