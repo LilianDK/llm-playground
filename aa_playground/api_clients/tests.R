@@ -1,19 +1,40 @@
+# Install and or load packages - set variables ---------------------------------
+packages <- c("pdftools","reticulate","glue")
+
+installed_packages <- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+
 library(pdftools)
 library(reticulate)
 library(glue)
+
+# Put the path to your python environment here 
 use_python("/Users/lilian.do-khac/.pyenv/versions/3.11.4/bin/python")
+
+py_install("aleph-alpha-client")
+py_install("Jinja2")
 py_install("numpy")
 py_install("rpy2")
 
-source_python("api_clients/aa_semantic_search_inmemo.py")
-source_python("api_clients/aa_qna.py")
+# Get your python file
+source_python("api_clients/aa_summarization.py")
 
-token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0MjcyLCJ0b2tlbl9pZCI6MzA4NH0.SyDVglcLc5FLLF86GV9z0D4WfxQF0uvAmeW8YlnG7to"
+token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0MjcyLCJ0b2tlbl9pZCI6MzExMH0.waXyiiWVTYaiHkpW2fuTcFx9-R67j3_FZBpm0yfEUFg"
 
-# Data pre-processing step: Parsing PDF input to input format for semantic search
-pdf_file = "www/0.pdf"
+# Load PDF file and parse ------------------------------------------------------
+pdf_file = "www/Testfile.pdf"
 txt = pdf_text(pdf_file)
-#document = txt[1]
+document = txt[2] # select the page you want to summarize
+document
+
+# Call Aleph Alpha API ---------------------------------------------------------
+summary = summary(token, document)
+summary
+
+
+
 
 df = data.frame(matrix(nrow = 0, ncol = 0)) 
 for (x in 1:nrow(as.data.frame(txt))) {

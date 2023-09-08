@@ -1,0 +1,9 @@
+version: "3"
+services:
+  aa_playground:
+    build: .
+    # volumes:
+    #  - ${INPUT_DIRECTORY}:/input
+    #  - ${OUTPUT_DIRECTORY}:/output
+    ports:
+      - 3838:3838

@@ -1,2 +1,10 @@
 .DS_Store
 .Rproj.user
+library/
+local/
+cellar/
+lock/
+python/
+sandbox/
+staging/
+.vscode/
