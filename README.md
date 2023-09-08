@@ -83,9 +83,9 @@ You can find the summarization and chat prompt in the "prompts" folder.
 
 Configuration of the summarization prompt:
 
-**token**: Identification and authorization to access Aleph Alpha API.
-**document**: Input document that shall be summarized.
-This summarization is a very simple one and is intended for rather short text input summarizations (e.g. 1 A4 page). It is not suited for long text input summarizations.
+**token**: Identification and authorization to access Aleph Alpha API. <br />
+**document**: Input document that shall be summarized. <br />
+*This summarization is a very simple one and is intended for rather short text input summarizations (e.g. 1 A4 page). It is not suited for long text input summarizations.* <br />
 ```
 import os
 
@@ -117,9 +117,9 @@ def summary(token, document):
 
 Configuration of the chat prompt:
 
-**token**: Identification and authorization to access Aleph Alpha API.
-**request**: Input question in natural language.
-This chat prompt is a very simple one and intended to be used to chat with the world knowledge of the foundation model.
+**token**: Identification and authorization to access Aleph Alpha API. <br />
+**request**: Input question in natural language. <br />
+*This chat prompt is a very simple one and intended to be used to chat with the world knowledge of the foundation model.*
 ```
 import os
 
@@ -146,11 +146,11 @@ def chat(token, request):
 
 Configuration of the embedding function:
 
-**token**: Identification and authorization to access Aleph Alpha API.
-**text_chunks**: Input document has been split into text chunks (e.g. per page or per paragraph etc.).
-**query**: Input question in natural language.
-**n**: Top n text_chunks output that are most similar according to cosine similarity.
-This embedding function is configured for one way information retrieval and not for chatting, which would be bi-directional.
+**token**: Identification and authorization to access Aleph Alpha API. <br />
+**text_chunks**: Input document has been split into text chunks (e.g. per page or per paragraph etc.). <br />
+**query**: Input question in natural language. <br />
+**n**: Top n text_chunks output that are most similar according to cosine similarity. <br />
+*This embedding function is configured for one way information retrieval and not for chatting, which would be bi-directional.*
 ```
 import os
 import numpy as np
