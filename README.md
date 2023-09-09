@@ -242,6 +242,7 @@ Will be added soon when docker container is done. Meanwhile:
 - Calculations everywhere
 - Database for token tracking
 - https://github.com/momper14/alephAlphaClient
+- https://github.com/daattali/shinyscreenshot/
 
 ## ⛏️ Licensing Overview <a name = "licensingoverview"></a>
 
