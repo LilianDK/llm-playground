@@ -260,6 +260,7 @@ Will be added soon when docker container is done. Meanwhile:
 | <img src="https://raw.githubusercontent.com/rstudio/shiny/main/man/figures/logo.png" width="25"> [Shiny](https://github.com/rstudio/shiny/tree/main)     | 2.24 | GPL-3 |
 | <img src="https://avatars.githubusercontent.com/u/23062899?s=48&v=4" width="25"> [ShinyWidgets](https://dreamrs.github.io/shinyWidgets/) | 0.8.0 | GPL-3 |
 | <img src="https://camo.githubusercontent.com/51da0973891f15de1404fe9e17951136a420dafec4f9bbfa883e6283623c9317/68747470733a2f2f626f6f747377617463682e636f6d2f5f6173736574732f696d672f6c6f676f2d6461726b2e737667" width="25"> [Bootswatch](https://github.com/thomaspark/bootswatch) | N/A | MIT |
+| <img src="https://raw.githubusercontent.com/rstudio/shiny/main/man/figures/logo.png" width="25"> [shinycssloaders]([https://github.com/rstudio/shiny/tree/main](https://cran.r-project.org/web/packages/shinycssloaders/index.html))     | 1.0.0 | MIT |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [bslib](https://rstudio.github.io/bslib/) | 0.5.1 | MIT |
 | <img src="https://openair-lib.org/logo.png" width="25"> [TheOpenAIR](https://openair-lib.org/) | 0.1.0 | MIT |
 | <img src="https://rstudio.github.io/reticulate/reference/figures/reticulated_python.png" width="25"> [Reticulate](https://rstudio.github.io/reticulate/) | 1.31 | Apache-2.0 |
