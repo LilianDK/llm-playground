@@ -229,9 +229,7 @@ background: linear-gradient(90deg, rgba(6,73,140,1) 28%, rgba(21,146,227,1) 63%,
 
 ## 🚀 Deployment <a name = "deployment"></a>
 Will be added soon when docker container is done. Meanwhile:
-- Have the pre-requisites installed
-- Get the reticulate working
-- Run "app.R"
+- git clone
 
 ## ⛏️ Issues <a name = "issues"></a>
 - For the question and answering part one can select top n chunks to be displayed. However, only top n - 1 chunks will be displayed.
