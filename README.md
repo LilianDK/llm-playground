@@ -248,6 +248,8 @@ Will be added soon when docker container is done. Meanwhile:
 | Name    | Version | Licence |
 | -------- | ------- | ------- |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [R](https://www.r-project.org/)     | 4.3.1 | GPL-2/GPL-3 |
+| <img src="https://avatars.githubusercontent.com/u/274806?s=48&v=4" width="25"> [shinyproxy](https://github.com/openanalytics/shinyproxy)     | 3.0.2 | Apache-2.0 (scheduled for integration) |
+| <img src="https://www.r-project.org/Rlogo.png" width="25"> [Aleph Alpha Client](https://github.com/momper14/alephAlphaClientl)     | None | None (scheduled for integration) |
 | <img src="https://rstudio.github.io/renv/logo.svg" width="25"> [renv](https://rstudio.github.io/renv/articles/renv.html)     | 1.0.2 | MIT |
 | <img src="https://glue.tidyverse.org/logo.png" width="25"> [Glue](https://glue.tidyverse.org/)     | 1.6.2 | MIT |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [DT](https://cran.r-project.org/web/packages/DT/index.html)     | 0.29 | GPL-3 |
@@ -263,6 +265,7 @@ Will be added soon when docker container is done. Meanwhile:
 | <img src="https://rstudio.github.io/reticulate/reference/figures/reticulated_python.png" width="25"> [Reticulate](https://rstudio.github.io/reticulate/) | 1.31 | Apache-2.0 |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1869px-Python-logo-notext.svg.png" width="25"> [Python](https://www.python.org/) | 3.11 | PSF-2 |
 | <img src="https://avatars.githubusercontent.com/u/61506608?s=48&v=4" width="25"> [Aleph Alpha Client](https://github.com/Aleph-Alpha/aleph-alpha-client) | 3.4.1 | MIT |
+| <img src="https://avatars.githubusercontent.com/u/54850923?s=48&v=4" width="25"> [Cohere Client](https://github.com/cohere-ai/cohere-python) | None | MIT  (scheduled for integration) |
 | <img src="https://pypi.org/static/images/logo-small.2a411bc6.svg" width="25"> [Jinja2](https://pypi.org/project/Jinja2/) | 3.1.2 | BSD License (BSD-3-Clause) |
 | <img src="https://numpy.org/doc/stable/_static/numpylogo.svg" width="25"> [NumPy](https://numpy.org/doc/stable/index.html) | 1.25 | NumPy licence |
 | <img src="https://avatars.githubusercontent.com/u/5429470?s=200&v=4" width="25"> [Docker](https://github.com/docker) | 23.0.3 | Apache-2.0 |
