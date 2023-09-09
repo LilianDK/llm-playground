@@ -20,7 +20,6 @@
 * [Usage](#usage)
   * [Configuration of prompt input files](#configprompt)
   * [Configuration of front-end color scheme input files](#configcolor)
-* [Built Using](#built_using)
 * [TODO](#todo)
 * [Licensing Overview](#licensingoverview)
 * [Authors](#authors)
@@ -234,13 +233,6 @@ Will be added soon when docker container is done. Meanwhile:
 - Get the reticulate working
 - Run "app.R"
 
-## ⛏️ Built Using <a name = "built_using"></a>
-- [R Shiny](https://www.rstudio.com/products/shiny/) - Web application
-- [Aleph Alpha](https://www.aleph-alpha.com/) - Foundation models
-- [Jinja](https://jinja.palletsprojects.com/en/3.1.x/) - Prompts
-- [Bootswatch](https://bootswatch.com/) - Cosmetics
-- [Python](https://www.python.org/) - API connector
-
 ## ⛏️ TO DO <a name = "todo"></a>
 - Improve the summarization prompt (so far just a bad prompt is embedded)
 - Included other LLM API, maybe cohere
@@ -248,6 +240,7 @@ Will be added soon when docker container is done. Meanwhile:
 - ShinyProxy
 - Prompt Catalogue
 - Calculations everywhere
+- Database for token tracking
 - https://github.com/momper14/alephAlphaClient
 
 ## ⛏️ Licensing Overview <a name = "licensingoverview"></a>
