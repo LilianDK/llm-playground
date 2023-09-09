@@ -233,6 +233,10 @@ Will be added soon when docker container is done. Meanwhile:
 - Get the reticulate working
 - Run "app.R"
 
+## ⛏️ Issues <a name = "issues"></a>
+- For the question and answering part one can select top n chunks to be displayed. However, only top n - 1 chunks will be displayed.
+- Output of the score is not correct.
+  
 ## ⛏️ TO DO <a name = "todo"></a>
 - Improve the summarization prompt (so far just a bad prompt is embedded)
 - Included other LLM API, maybe cohere
