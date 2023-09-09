@@ -229,7 +229,9 @@ background: linear-gradient(90deg, rgba(6,73,140,1) 28%, rgba(21,146,227,1) 63%,
 
 ## 🚀 Deployment <a name = "deployment"></a>
 Will be added soon when docker container is done. Meanwhile:
-- git clone
+- Install Docker on the deployment environemnt
+- git clone https://github.com/LilianDK/llm-playground.git
+- docker compose up --build (approx. more than 5 minutes)
 
 ## ⛏️ Issues <a name = "issues"></a>
 - For the question and answering part one can select top n chunks to be displayed. However, only top n - 1 chunks will be displayed.
