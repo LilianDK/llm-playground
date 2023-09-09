@@ -243,9 +243,11 @@ Will be added soon when docker container is done. Meanwhile:
 
 ## ⛏️ TO DO <a name = "todo"></a>
 - Improve the summarization prompt (so far just a bad prompt is embedded)
-- Adding docker container
 - Included other LLM API, maybe cohere
 - Adding chatbot functionality
+- ShinyProxy
+- Prompt Catalogue
+- Calculations everywhere
 - https://github.com/momper14/alephAlphaClient
 
 ## ⛏️ Licensing Overview <a name = "licensingoverview"></a>
