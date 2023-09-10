@@ -2,8 +2,8 @@
     "sortOrder": [
         {
             "columnIndex": 2,
-            "ascending": true
+            "ascending": false
         }
     ],
-    "path": "~/Documents/AI Applications/llm-playground/aa_playground/www"
+    "path": "~/Documents/AI Applications/llm-playground/aa_playground/api_clients"
 }

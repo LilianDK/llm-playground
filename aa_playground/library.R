@@ -1,7 +1,7 @@
 # Required if local development environment has to be set due to reticulate having issues to find the right path
 local_development = FALSE
 
-packages <- c("shiny","bslib","thematic","reticulate","TheOpenAIR","glue","DT","pdftools","knitr","rmarkdown","remotes")
+packages <- c("shiny","bslib","thematic","reticulate","TheOpenAIR","glue","DT","pdftools","knitr","rmarkdown","remotes","shinycssloaders","reactlog")
 
 installed_packages <- packages %in% rownames(installed.packages())
 if (any(installed_packages == FALSE)) {
@@ -9,6 +9,7 @@ if (any(installed_packages == FALSE)) {
 }
 # remotes::install_github("dreamRs/shinyWidgets")
 
+# part of the functionalities
 library(shiny)
 library(shinyWidgets)
 library(bslib)
@@ -19,7 +20,12 @@ library(glue)
 library(DT)
 library(pdftools)
 library(rmarkdown)
-install_python(version = "3.11:latest", list = FALSE, force = FALSE)
+library(shinycssloaders)
+
+# part of debugging
+library(reactlog)
+options(shiny.reactlog = TRUE)
+#install_python(version = "3.11:latest", list = FALSE, force = FALSE)
 if (local_development) {
   
   # Put the path to your python environment here

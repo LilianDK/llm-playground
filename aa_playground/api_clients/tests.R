@@ -1,32 +1,10 @@
-# Install and or load packages - set variables ---------------------------------
-packages <- c("pdftools","reticulate","glue")
 
-installed_packages <- packages %in% rownames(installed.packages())
-if (any(installed_packages == FALSE)) {
-  install.packages(packages[!installed_packages])
-}
-
-library(pdftools)
-library(reticulate)
-library(glue)
-
-# Put the path to your python environment here 
-use_python("/Users/USERNAME/.pyenv/versions/3.11.4/bin/python")
-
-py_install("aleph-alpha-client")
-py_install("Jinja2")
-py_install("numpy")
-py_install("rpy2")
-
-# Get your python file
-source_python("api_clients/aa_summarization.py")
-
-token = "TOKEN"
+token = ""
 
 # Load PDF file and parse ------------------------------------------------------
-pdf_file = "www/Testfile.pdf"
+pdf_file = "www/dp.pdf"
 txt = pdf_text(pdf_file)
-document = txt[2] # select the page you want to summarize
+document = txt[1] # select the page you want to summarize
 document
 
 # Call Aleph Alpha API ---------------------------------------------------------
@@ -78,3 +56,29 @@ localization = qna[[1]]
 score = qna[[2]]
 nlg = trimws(qna[[4]])
 
+namedentity1="Auftragsnummer"
+namedentity2="Betrag"
+namedentity3="Rechnungsdatum"
+entityextraction = entityextraction(token, document, namedentity1, namedentity2, namedentity3)
+entityextraction
+return(entityextraction)
+test = substring(entityextraction, regexpr("\n", entityextraction) - 10)
+test
+
+result1 = substr(entityextraction,0,regexpr("\n", entityextraction)-1)
+result1
+nchar(result1)
+result2 = gsub(substr(entityextraction,0,nchar(result1)+1), '', entityextraction)
+result2
+result2 = substr(result2,0,regexpr("\n", result2)-2)
+result2
+nchar(result2)
+result3 = substr(entityextraction,nchar(result1)+2+nchar(result2)+2,nchar(entityextraction))
+result3
+
+tbl = data.frame(matrix(nrow = 0, ncol = 4)) 
+colnames(tbl) = c("Document ID",namedentity1,namedentity2,namedentity3)
+tbl[1,2]<-trimws(gsub(".*:","",result1))
+tbl[1,3]<-trimws(gsub(".*:","",result2))
+tbl[1,4]<-trimws(gsub(".*:","",result3))
+tbl
