@@ -4,10 +4,7 @@ source_python("api_clients/aa_client.py")
 source_python("api_clients/aa_qna.py")
 source_python("api_clients/aa_semantic_search_inmemo.py")
 source_python("api_clients/aa_summarization.py")
-
-setwd("/Users/lilian.do-khac/Documents/AI Applications/llm-playground-script only/")
-getwd()
-#py_run_file(glue("api_clients/aa_client.py"))
+source_python("api_clients/aa_entityextraction.py")
 
 server <- function(input, output,session) {
 
@@ -207,6 +204,52 @@ server <- function(input, output,session) {
   })|>
     bindEvent(input$button5)
   
+  # Communication with aleph alpha compute center for documentprocessing job----
+  rawoutput11 <- eventReactive(input$button10,{
+    
+    token = input$text_token
+    path = getwd()
+    pdf_file = glue("{path}/www/0.pdf")
+    txt = pdf_text(pdf_file)
+    document = txt[1]
+    entityextraction = entityextraction(token, document, input$namedentity1, input$namedentity2, input$namedentity3)
+    return(entityextraction)
+  })
+  
+  output$namedentityresults <- renderDT({  
+    result = rawoutput11()
+    result1 = substr(result,0,regexpr("\n", result)-1)
+    result2 = gsub(substr(result,0,nchar(result1)+1), '', result)
+    result2 = substr(result2,0,regexpr("\n", result2)-2)
+    result3 = substr(result,nchar(result1)+2+nchar(result2)+2,nchar(result))
+    
+    tbl = data.frame(matrix(nrow = 0, ncol = 4)) 
+    colnames(tbl) = c("Document ID",trimws(gsub(":.*","",result1)),trimws(gsub(":.*","",gsub(substr(result,0,nchar(result1)+2), '', result))),trimws(gsub(":.*","",result3)))
+    tbl[1,2]<-trimws(gsub(".*:","",result1))
+    tbl[1,3]<-trimws(gsub(".*:","",result2))
+    tbl[1,4]<-trimws(gsub(".*:","",result3))
+    tbl
+  }, 
+  rownames=FALSE,
+  options = list(dom = 't'))|>
+    bindEvent(input$button10)
+  
+  output$text_prompt22 <- renderText({ 
+    pdf_file = glue("www/0.pdf")
+    txt = pdf_text(pdf_file)
+    document = txt[1]
+    input_cost = count_tokens(document)/1000 * model_price["luminous-base-control",1] * task_factor["complete",1] 
+    + input$num_maxtoken/1000 * model_price["luminous-base-control",1] * task_factor["complete",2]
+    input_cost
+  })
+  
+  output$text_prompt23 <- renderText({ 
+    result = rawoutput11()
+    estimatedtoken = count_tokens(result)
+    input_cost = count_tokens(result)/1000 * model_price["luminous-base-control",1] * task_factor["complete",2]
+    input_cost
+  })
+
   # Tokenizer to estimate tokens -----------------------------------------------
   output$text_prompt2 <- renderText({ 
     estimatedtokena = 0
@@ -217,7 +260,7 @@ server <- function(input, output,session) {
     estimatedtokenb = 0
     estimatedtokena = count_tokens(rawoutput())
   })|>
-    bindEvent(input$button1)
+    bindEvent(input$button10)
   
   # Cost calculation -----------------------------------------------------------
   output$text_prompt5 <- renderText({  
@@ -274,7 +317,7 @@ server <- function(input, output,session) {
     
     file.copy(input$file_input$datapath,"www", overwrite = T)
     filepath = input$file_input$datapath
-    
+    print(input$file_input$datapath)
     # Count token
     output$sumtoken = renderText({  
       pdf_file = filepath
@@ -351,7 +394,60 @@ server <- function(input, output,session) {
   })
   
   observe({
-    req(input$file_input2)
+    req(input$file_input3)
+    print(input$file_input3$datapath)
+    file.copy(input$file_input3$datapath,"www", overwrite = T)
+    filepath = input$file_input3$datapath
+    
+    # Count token
+    output$sumtoken5 = renderText({  
+      pdf_file = filepath
+      txt = pdf_text(pdf_file)
+      df = data.frame(page="",
+                      tokens=""
+      )
+      x = 1
+      for (x in 1:length(txt)) {
+        token = count_tokens(txt[x])
+        tupel = as.integer(c(x, token))
+        df = rbind(df, tupel)
+      } 
+      
+      df = df[-1,]
+      
+      df$tokens <- as.integer(df$tokens)  
+      x <- sum(df[, 'tokens'])
+      
+    })
+    
+    output$pdfview3 = renderUI({
+      tags$iframe(style="height:800px; width:100%", src="0.pdf")
+    })
+    
+    # Count token
+    output$df5 = renderDT({  
+      pdf_file = filepath
+      txt = pdf_text(pdf_file)
+      df = data.frame(page="",
+                      tokens=""
+      )
+      x = 1
+      for (x in 1:length(txt)) {
+        token = count_tokens(txt[x])
+        tupel = as.integer(c(x, token))
+        df = rbind(df, tupel)
+      } 
+      
+      df = df[-1,c(1,2)]
+      df
+    }, 
+    rownames=FALSE,
+    options = list(dom = 't'))
+    
+  })
+  
+  observe({
+    req(input$file_input3)
     
   output$pdfview2 = renderUI({
     tags$iframe(style="height:800px; width:100%", src="0.pdf")
