@@ -801,6 +801,17 @@
       ],
       "Hash": "5e3c5dc0b071b21fa128676560dbe94d"
     },
+    "reactlog": {
+      "Package": "reactlog",
+      "Version": "1.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "jsonlite"
+      ],
+      "Hash": "745883ab4ed03f20593cd27334712eaf"
+    },
     "renv": {
       "Package": "renv",
       "Version": "1.0.2",
