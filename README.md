@@ -253,6 +253,7 @@ docker compose up --build
 - https://github.com/momper14/alephAlphaClient
 - https://github.com/daattali/shinyscreenshot/
 - Test framework for document processing
+- Audio recording and openai Whisper integration
 
 ## ⛏️ Licensing Overview <a name = "licensingoverview"></a>
 
@@ -261,6 +262,7 @@ docker compose up --build
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [R](https://www.r-project.org/)     | 4.3.1 | GPL-2/GPL-3 |
 | <img src="https://avatars.githubusercontent.com/u/274806?s=48&v=4" width="25"> [shinyproxy](https://github.com/openanalytics/shinyproxy)     | 3.0.2 | Apache-2.0 (scheduled for integration) |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [Aleph Alpha Client](https://github.com/momper14/alephAlphaClientl)     | None | None (scheduled for integration) |
+| <img src="https://www.r-project.org/Rlogo.png" width="25"> [audio](https://search.r-project.org/CRAN/refmans/audio/html/record.html)  | 0.1.11 | MIT (scheduled for integration) |
 | <img src="https://github.com/bnosac/audio.whisper/blob/master/tools/logo-audio-whisper-x100.png" width="25"> [OpenAI Whisper](https://github.com/bnosac/audio.whisper)     | 0.2.1-1 | MIT (scheduled for integration) |
 | <img src="https://rstudio.github.io/renv/logo.svg" width="25"> [renv](https://rstudio.github.io/renv/articles/renv.html)     | 1.0.2 | MIT |
 | <img src="https://glue.tidyverse.org/logo.png" width="25"> [Glue](https://glue.tidyverse.org/)     | 1.6.2 | MIT |
