@@ -1,9 +1,12 @@
 source("configurations/lookup.R")
-source_python("api_clients/aa_client.py")
-source_python("api_clients/aa_summarization.py")
 source_python("api_clients/aa_chat.py")
+source_python("api_clients/aa_client.py")
 source_python("api_clients/aa_qna.py")
+source_python("api_clients/aa_semantic_search_inmemo.py")
+source_python("api_clients/aa_summarization.py")
 
+setwd("/Users/lilian.do-khac/Documents/AI Applications/llm-playground-script only/")
+getwd()
 #py_run_file(glue("api_clients/aa_client.py"))
 
 server <- function(input, output,session) {
@@ -64,7 +67,7 @@ server <- function(input, output,session) {
     summary = summary(token, document)
     return(summary)
   })
-  
+
   # Logging of the parameter settings for the prompt report
   parameterframe <- eventReactive(input$button1,{ 
     first_column = c("Model","Max tokens","Best of","Temperature","Top k","Top p","Presency penalty","Frequency penalty")
@@ -100,13 +103,13 @@ server <- function(input, output,session) {
       
       # Semantic search
       #query = "Wieviel Euro muss soll die Beklagte zahlen?"
-      index = semanticsearch(token, text_chunks$Text_chunk, query, as.integer(3)) # 3 austasuchen mit variable von frontend
+      index = semanticsearch(token, text_chunks$Text_chunk, query, as.integer(input$topn)) # 3 austasuchen mit variable von frontend
       
       # Data post-processing step: Transform LLM result to expected tabular output format
       tbl = data.frame(matrix(nrow = 0, ncol = 0)) 
       
       for (x in 1:length(index)-1) {
-        newvalue = as.integer(index[x]$item())
+        newvalue = as.integer(index[x])
         tbl = rbind(tbl,newvalue)
       } 
       
@@ -122,10 +125,17 @@ server <- function(input, output,session) {
       string = trimws(gsub("[\r\n]", "", string))
       
       qna = qna(token, string, query)
+
+      nlg = trimws(qna[[4]])
+      
+      input_cost = count_tokens(query)/1000 * model_price["luminous-extended-control",1] * task_factor["complete",1] 
+      + count_tokens(nlg)/1000 * model_price["luminous-extended-control",1] * task_factor["complete",2]
       
       return(list(
         val1 = qna,
-        val2 = results
+        val2 = results,
+        val3 = string,
+        val4 = input_cost
       ))
 
   })
@@ -133,7 +143,7 @@ server <- function(input, output,session) {
   output$text_prompt11 <- renderText({ 
     result = rawoutput9()
     result = result$val1
-    #localization = result[[1]]
+    #localization = result[[3]]
     #score = result[[2]]
     nlg = trimws(result[[4]])
     return(nlg)
@@ -143,10 +153,11 @@ server <- function(input, output,session) {
   output$text_prompt12 <- renderText({ 
     result = rawoutput9()
     result = result$val1
-    localization = result[[1]]
-    #score = result[[2]]
+    localization = result[[3]]
+    score = result[[2]]
     #nlg = trimws(result[[4]])
-    return(localization)
+    string = glue("{localization} Score: {(score)}")
+    return(string)
   })|>
     bindEvent(input$button5)
   
@@ -156,6 +167,44 @@ server <- function(input, output,session) {
   }, 
   rownames=FALSE,
   options = list(dom = 't'))|>
+    bindEvent(input$button5)
+  
+  # Count cost
+  output$embeddcost2 <- renderText({ 
+    result = input$text_prompt10
+    x = count_tokens(result)
+    
+    input_cost = x/1000 * model_price["luminous-base",1] * task_factor["embed",1] 
+  })|>
+    bindEvent(input$button5)
+  
+  output$embeddcost3 <- renderText({ 
+    pdf_file = "www/0.pdf"
+    txt = pdf_text(pdf_file)
+    df = data.frame(page="",
+                    tokens=""
+    )
+    x = 1
+    for (x in 1:length(txt)) {
+      token = count_tokens(txt[x])
+      tupel = as.integer(c(x, token))
+      df = rbind(df, tupel)
+    } 
+    
+    df = df[-1,]
+    
+    df$tokens = as.integer(df$tokens)  
+    x = sum(df[, 'tokens'])
+    
+    input_cost = x/1000 * model_price["luminous-base",1] * task_factor["embed",1] 
+  })|>
+    bindEvent(input$button5)
+  
+  output$generatedcosts <- renderText({  
+    result = rawoutput9()
+    result = result$val4
+    return(result)
+  })|>
     bindEvent(input$button5)
   
   # Tokenizer to estimate tokens -----------------------------------------------

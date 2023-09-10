@@ -11,7 +11,7 @@ library(reticulate)
 library(glue)
 
 # Put the path to your python environment here 
-use_python("/Users/lilian.do-khac/.pyenv/versions/3.11.4/bin/python")
+use_python("/Users/USERNAME/.pyenv/versions/3.11.4/bin/python")
 
 py_install("aleph-alpha-client")
 py_install("Jinja2")
@@ -21,7 +21,7 @@ py_install("rpy2")
 # Get your python file
 source_python("api_clients/aa_summarization.py")
 
-token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0MjcyLCJ0b2tlbl9pZCI6MzExMH0.waXyiiWVTYaiHkpW2fuTcFx9-R67j3_FZBpm0yfEUFg"
+token = "TOKEN"
 
 # Load PDF file and parse ------------------------------------------------------
 pdf_file = "www/Testfile.pdf"
@@ -50,14 +50,14 @@ df = df[!(is.na(df$Text_chunk) | df$Text_chunk==""), ]
 text_chunks = as.list(df)
 
 # Semantic search
-query = "Wieviel Euro muss soll die Beklagte zahlen?"
+query = "Wieviel muss die Klägerin zahlen?"
 index = semanticsearch(token, text_chunks$Text_chunk, query, as.integer(3))
 
 # Data post-processing step: Transform LLM result to expected tabular output format
 tbl = data.frame(matrix(nrow = 0, ncol = 0)) 
 
 for (x in 1:length(index)-1) {
-  newvalue = as.integer(index[x]$item())
+  newvalue = as.integer(index[x])
   tbl = rbind(tbl,newvalue)
 } 
 

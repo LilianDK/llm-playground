@@ -13,7 +13,7 @@ def qna(token, string, query):
   client = Client(token)
   request = CompletionRequest(
       prompt=Prompt.from_text(prompt_text),
-      maximum_tokens = 142,
+      maximum_tokens = 64,
       best_of = 2,
       temperature = 0,
       top_k = 0,
@@ -29,7 +29,7 @@ def qna(token, string, query):
   answer = response.completions[0].completion
   
   # explanation task
-  exp_req = ExplanationRequest(Prompt.from_text(prompt_text), answer , control_factor=0.1, prompt_granularity="sentence", normalize=True)
+  exp_req = ExplanationRequest(Prompt.from_text(prompt_text), answer , control_factor=0.1, prompt_granularity="word", normalize=True)
   response_explain = client.explain(exp_req, model="luminous-extended-control")
 
   explanations = response_explain[1][0].items[0][0]
