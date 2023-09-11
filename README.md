@@ -282,11 +282,13 @@ docker compose up --build
 | <img src="https://github.com/bnosac/audio.whisper/blob/master/tools/logo-audio-whisper-x100.png" width="25"> [OpenAI Whisper](https://github.com/bnosac/audio.whisper)     | 0.2.1-1 | MIT (scheduled for integration) |
 | <img src="https://rstudio.github.io/renv/logo.svg" width="25"> [renv](https://rstudio.github.io/renv/articles/renv.html)     | 1.0.2 | MIT |
 | <img src="https://glue.tidyverse.org/logo.png" width="25"> [Glue](https://glue.tidyverse.org/)     | 1.6.2 | MIT |
+| <img src="https://stringr.tidyverse.org/logo.png" width="25"> [Stringr](https://stringr.tidyverse.org/reference/str_detect.html)     | 1.5.0 | MIT |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [DT](https://cran.r-project.org/web/packages/DT/index.html)     | 0.29 | GPL-3 |
 | <img src="https://docs.ropensci.org/pdftools/logo.png" width="25"> [pdftools](https://docs.ropensci.org/pdftools/)     | 3.3.3 | MIT |
 | <img src="https://rpy2.github.io/images/rpy2_logo2013.png" width="25"> [rpy2](https://pypi.org/project/rpy2/) | 3.5.14 | GPLv2+ |
 | <img src="https://rstudio.github.io/thematic/reference/figures/logo.png" width="25"> [thematic](https://rstudio.github.io/thematic/index.html)     | 0.1.3 | MIT |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [Rmarkdown](https://rmarkdown.rstudio.com/github_document_format.html)     | 3.3.3 | GPL-3 |
+| <img src="https://pypi.org/static/images/logo-small.2a411bc6.svg" width="25"> [markdown](https://pypi.org/project/Markdown/)     | 3.4.4 | BSD License |
 | <img src="https://raw.githubusercontent.com/rstudio/shiny/main/man/figures/logo.png" width="25"> [Shiny](https://github.com/rstudio/shiny/tree/main)     | 2.24 | GPL-3 |
 | <img src="https://avatars.githubusercontent.com/u/23062899?s=48&v=4" width="25"> [ShinyWidgets](https://dreamrs.github.io/shinyWidgets/) | 0.8.0 | GPL-3 |
 | <img src="https://camo.githubusercontent.com/51da0973891f15de1404fe9e17951136a420dafec4f9bbfa883e6283623c9317/68747470733a2f2f626f6f747377617463682e636f6d2f5f6173736574732f696d672f6c6f676f2d6461726b2e737667" width="25"> [Bootswatch](https://github.com/thomaspark/bootswatch) | 5.3.1 | MIT |
