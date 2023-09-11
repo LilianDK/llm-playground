@@ -21,6 +21,6 @@ def summary(token, document):
       presence_penalty = 0,
       frequency_penalty = 0,
   )
-  response = client.complete(request, model = "luminous-extended-control")
+  response = client.complete(request, model = "luminous-supreme-control")
   print(response)
   return response.completions[0].completion

@@ -5,7 +5,11 @@ summarization =     nav_panel(title = "Summarization",
                                        card(min_height = 100,
                                             card_header("PDF:"),
                                             uiOutput("pdfview"),
-                                            fileInput("file_input", "upload file ( . pdf format only)", accept = c(".pdf"))
+                                            shinycssloaders::withSpinner(
+                                              textOutput("transcription")
+                                            ),
+                                            fileInput("file_input", "upload file ( . pdf format only)", accept = c(".pdf")),
+                                            fileInput("file_input9", "upload file ( . wav, mp3, mp4 format only)", accept = c(".wav",".mp3",".mp4"))
                                        )
                                 ),
                                 column(width = 4,

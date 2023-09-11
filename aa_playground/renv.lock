@@ -190,6 +190,33 @@
       ],
       "Hash": "e8a22846fff485f0be3770c2da758713"
     },
+    "audio.whisper": {
+      "Package": "audio.whisper",
+      "Version": "0.2.1-1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "audio.whisper",
+      "RemoteUsername": "bnosac",
+      "RemoteRef": "0.2.1-1",
+      "RemoteSha": "64a0eaf89dca61d48b93b4cff47841d1422f5373",
+      "Requirements": [
+        "R",
+        "Rcpp"
+      ],
+      "Hash": "ba65e16ae41bcd278c1ff6f1f5219daa"
+    },
+    "av": {
+      "Package": "av",
+      "Version": "0.8.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "graphics"
+      ],
+      "Hash": "a5827e9c659b5d73d09926838287fcec"
+    },
     "base64enc": {
       "Package": "base64enc",
       "Version": "0.1-3",

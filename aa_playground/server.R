@@ -6,6 +6,8 @@ source_python("api_clients/aa_semantic_search_inmemo.py")
 source_python("api_clients/aa_summarization.py")
 source_python("api_clients/aa_entityextraction.py")
 
+options(shiny.maxRequestSize=30*1024^2)
+
 server <- function(input, output,session) {
 
   options(scipen=999)
@@ -54,17 +56,73 @@ server <- function(input, output,session) {
 
   # Communication with aleph alpha compute center for summary job---------------
   rawoutput2 <- eventReactive(input$button2,{
-    
+
     token = input$text_token
+
+    # processing of PDF file
     print(input$selectedPage)
     path = getwd()
     pdf_file = glue("{path}/www/0.pdf")
     txt = pdf_text(pdf_file)
     document = txt[input$selectedPage]
     summary = summary(token, document)
+
     return(summary)
   })
-
+    
+  rawoutput20 <- eventReactive(input$file_input9,{
+    
+    req(input$file_input9)
+    print(input$file_input9$datapath)
+    file.copy(input$file_input9$datapath,"www", overwrite = T)
+    filepath = input$file_input9$datapath
+    
+    # processing of non-PDF file
+    df = data.frame(matrix(nrow = 0, ncol = 4)) 
+      
+    # transcripe audio file
+    av_audio_convert(filepath, output = "www/output.wav", format = "wav", sample_rate = 16000)
+    transcript = predict(whispermodel, "www/output.wav")
+      
+    # data preparation
+    col1 = as.data.frame(transcript$data$segment)
+    col2 = as.data.frame(transcript$data$from)
+    col3 = as.data.frame(transcript$data$to)
+    col4 = as.data.frame(transcript$data$text)
+      
+    df = cbind(col1,col2,col3,col4)
+    df = df[!duplicated(df[,4]),]
+      
+    vector = data.frame(matrix(nrow = 0, ncol = 1)) 
+    for (x in 1:nrow(df)) {
+      tokens = count_tokens(df[x,4])
+      tokens
+      vector = rbind(vector, tokens)
+    } 
+    df = cbind(df, vector)
+    colnames(df) = c("segment","from","to","text","tokens")
+      
+    string = ""
+    for (x in 3:nrow(df)) {
+      string = glue("{string}{df[x,4]}")
+    }
+      
+    if (sum(df[,5]) <= 2048) {
+      document = string
+      summary = summary(token, document)
+      summary
+    } else {
+      summary = "File too large."
+      summary
+    }
+      
+    return(summary)
+  })
+    
+  output$transcription <- renderText({ 
+    rawoutput20()
+  })
+  
   # Logging of the parameter settings for the prompt report
   parameterframe <- eventReactive(input$button1,{ 
     first_column = c("Model","Max tokens","Best of","Temperature","Top k","Top p","Presency penalty","Frequency penalty")
@@ -310,14 +368,15 @@ server <- function(input, output,session) {
   })
   
   # PDF handling ---------------------------------------------------------------
-  # Upload PDF and display
   
+  # Upload PDF and display in summarization
   observe({
     req(input$file_input)
     
     file.copy(input$file_input$datapath,"www", overwrite = T)
     filepath = input$file_input$datapath
     print(input$file_input$datapath)
+    
     # Count token
     output$sumtoken = renderText({  
       pdf_file = filepath
@@ -361,7 +420,6 @@ server <- function(input, output,session) {
       input_cost = x/1000 * model_price["luminous-base",1] * task_factor["embed",1] 
     })
     
-    
     output$pdfview = renderUI({
       tags$iframe(style="height:800px; width:100%", src="0.pdf")
     })
@@ -390,9 +448,9 @@ server <- function(input, output,session) {
       rawoutput2()
     })|>
       bindEvent(input$button2)
-    
   })
   
+  # Upload PDF and display in qna
   observe({
     req(input$file_input2)
     
@@ -406,6 +464,7 @@ server <- function(input, output,session) {
     
   })
   
+  # Upload PDF and display in document processing
   observe({
     req(input$file_input3)
     print(input$file_input3$datapath)
@@ -462,9 +521,11 @@ server <- function(input, output,session) {
   observe({
     req(input$file_input3)
     
-  output$pdfview2 = renderUI({
+  output$pdfview3 = renderUI({
     tags$iframe(style="height:800px; width:100%", src="0.pdf")
   })
   })
+  
+  # Record audio and display 
   
 }
