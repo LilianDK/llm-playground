@@ -1,13 +1,14 @@
 # Required if local development environment has to be set due to reticulate having issues to find the right path
 local_development = FALSE
 
-packages <- c("shiny","bslib","thematic","reticulate","TheOpenAIR","glue","DT","pdftools","knitr","rmarkdown","remotes","shinycssloaders","reactlog")
+packages <- c("shiny","bslib","thematic","reticulate","TheOpenAIR","glue","DT","pdftools","knitr","rmarkdown","markdown","remotes","shinycssloaders","reactlog","devtools")
 
 installed_packages <- packages %in% rownames(installed.packages())
 if (any(installed_packages == FALSE)) {
   install.packages(packages[!installed_packages])
 }
 # remotes::install_github("dreamRs/shinyWidgets")
+# devtools::install_github("rstudio/gridlayout")
 
 # part of the functionalities
 library(shiny)
@@ -20,8 +21,9 @@ library(glue)
 library(DT)
 library(pdftools)
 library(rmarkdown)
+library(markdown)
 library(shinycssloaders)
-
+library(gridlayout)
 # part of debugging
 library(reactlog)
 options(shiny.reactlog = TRUE)
@@ -37,5 +39,5 @@ py_install("aleph-alpha-client")
 py_install("Jinja2")
 py_install("numpy")
 py_install("rpy2")
-
+py_install("markdown")
 

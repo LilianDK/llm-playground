@@ -394,6 +394,19 @@ server <- function(input, output,session) {
   })
   
   observe({
+    req(input$file_input2)
+    
+    file.copy(input$file_input2$datapath,"www", overwrite = T)
+    filepath = input$file_input2$datapath
+    print(input$file_input2$datapath)
+    
+    output$pdfview2 = renderUI({
+      tags$iframe(style="height:800px; width:100%", src="0.pdf")
+    })
+    
+  })
+  
+  observe({
     req(input$file_input3)
     print(input$file_input3$datapath)
     file.copy(input$file_input3$datapath,"www", overwrite = T)

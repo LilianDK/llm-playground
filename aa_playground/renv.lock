@@ -427,6 +427,25 @@
       ],
       "Hash": "4f2596dfb05dac67b9dc558e5c6fba2e"
     },
+    "gridlayout": {
+      "Package": "gridlayout",
+      "Version": "0.2.1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "gridlayout",
+      "RemoteUsername": "rstudio",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "f00d0e64a7866d308dbaee4ba873e7ad23fd0be0",
+      "Requirements": [
+        "R",
+        "htmltools",
+        "lifecycle",
+        "magrittr",
+        "rlang"
+      ],
+      "Hash": "b22c015f3449d55ef3ee262b75ce01ad"
+    },
     "gtable": {
       "Package": "gtable",
       "Version": "0.3.3",
