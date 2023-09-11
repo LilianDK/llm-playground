@@ -283,6 +283,7 @@ docker compose up --build
 | <img src="https://rstudio.github.io/renv/logo.svg" width="25"> [renv](https://rstudio.github.io/renv/articles/renv.html)     | 1.0.2 | MIT |
 | <img src="https://glue.tidyverse.org/logo.png" width="25"> [Glue](https://glue.tidyverse.org/)     | 1.6.2 | MIT |
 | <img src="https://stringr.tidyverse.org/logo.png" width="25"> [Stringr](https://stringr.tidyverse.org/reference/str_detect.html)     | 1.5.0 | MIT |
+| <img src="https://www.r-project.org/Rlogo.png" width="25"> [gridlayout](https://rstudio.github.io/gridlayout/)     | 0.2.1| MIT |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [DT](https://cran.r-project.org/web/packages/DT/index.html)     | 0.29 | GPL-3 |
 | <img src="https://docs.ropensci.org/pdftools/logo.png" width="25"> [pdftools](https://docs.ropensci.org/pdftools/)     | 3.3.3 | MIT |
 | <img src="https://rpy2.github.io/images/rpy2_logo2013.png" width="25"> [rpy2](https://pypi.org/project/rpy2/) | 3.5.14 | GPLv2+ |
