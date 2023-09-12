@@ -1,5 +1,5 @@
 # Required if local development environment has to be set due to reticulate having issues to find the right path
-local_development = TRUE
+local_development = FALSE
 
 packages <- c("shiny","bslib","thematic","reticulate","TheOpenAIR","glue","DT","pdftools",
               "knitr","rmarkdown","markdown","remotes","shinycssloaders","reactlog","devtools",
@@ -42,14 +42,16 @@ library(reactlog)
 options(shiny.reactlog = TRUE)
 
 if (local_development) {
-  # Put the path to your python environment here
-  use_python("/Users/lilian.do-khac/.pyenv/versions/3.11.4/bin/python")
+  # Creating virtual pyenv
+  virtualenv_create("py_backend", python=virtualenv_starter(version = "3.11"))
+  use_virtualenv("py_backend")
+  virtualenv_install("py_backend", c("aleph-alpha-client", "Jinja2"))
 } else {
   install_python(version = "3.11:latest", list = FALSE, force = FALSE)
 }
 
 py_install("aleph-alpha-client")
 py_install("Jinja2")
-py_install("numpy")
+#py_install("numpy")
 py_install("rpy2")
 py_install("markdown")
