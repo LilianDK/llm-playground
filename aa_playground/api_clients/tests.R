@@ -82,3 +82,42 @@ tbl[1,2]<-trimws(gsub(".*:","",result1))
 tbl[1,3]<-trimws(gsub(".*:","",result2))
 tbl[1,4]<-trimws(gsub(".*:","",result3))
 tbl
+
+# processing of non-PDF file
+df = data.frame(matrix(nrow = 0, ncol = 4)) 
+
+# transcripe audio file
+av_audio_convert("www/0.mp4", output = "www/output.wav", format = "wav", sample_rate = 16000)
+transcript = predict(whispermodel, "www/output.wav")
+
+# data preparation
+col1 = as.data.frame(transcript$data$segment)
+col2 = as.data.frame(transcript$data$from)
+col3 = as.data.frame(transcript$data$to)
+col4 = as.data.frame(transcript$data$text)
+
+df = cbind(col1,col2,col3,col4)
+df = df[!duplicated(df[,4]),]
+
+vector = data.frame(matrix(nrow = 0, ncol = 1)) 
+for (x in 1:nrow(df)) {
+  tokens = count_tokens(df[x,4])
+  tokens
+  vector = rbind(vector, tokens)
+} 
+df = cbind(df, vector)
+colnames(df) = c("segment","from","to","text","tokens")
+
+string = ""
+for (x in 3:nrow(df)) {
+  string = glue("{string}{df[x,4]}")
+}
+typeof(string)
+if (sum(df[,5]) <= 2048) {
+  document = as.character(string)
+  summary = summary("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0MjcyLCJ0b2tlbl9pZCI6MzE5NH0.dG7uigQtziQVpLlQdOYUg29TxgwbNl-yYXaU9iC1amA", document)
+  summary
+} else {
+  summary = "File too large."
+  summary
+}

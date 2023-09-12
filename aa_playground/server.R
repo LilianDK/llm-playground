@@ -70,7 +70,11 @@ server <- function(input, output,session) {
     return(summary)
   })
     
-  rawoutput20 <- eventReactive(input$file_input9,{
+  output$summary <- renderText({ 
+     rawoutput2()
+  })   
+  
+  rawoutput20 <- eventReactive(input$button22,{
     
     req(input$file_input9)
     print(input$file_input9$datapath)
@@ -108,19 +112,23 @@ server <- function(input, output,session) {
     }
       
     if (sum(df[,5]) <= 2048) {
-      document = string
-      summary = summary(token, document)
+      document = as.character(string)
+      summary = summary(input$token, document)
       summary
     } else {
       summary = "File too large."
       summary
     }
       
-    return(summary)
+    return(list(
+      val1 = string,
+      val2 = summary
+    ))
   })
     
   output$transcription <- renderText({ 
-    rawoutput20()
+    result = rawoutput20()
+    result = result$val1
   })
   
   # Logging of the parameter settings for the prompt report

@@ -1,5 +1,6 @@
+print("Loading aa_client.py-----------------------------------------------------")
 import os
-print("HUHU")
+
 from aleph_alpha_client import Client, CompletionRequest, Prompt
 
 def completion(token, prompt, model, stop_sequences, maximum_tokens, best_of, temperature, top_k, top_p, presence_penalty, frequency_penalty, n):

@@ -1,3 +1,4 @@
+print("Loading aa_semantic_search_inmemo.py-------------------------------------")
 import os
 import numpy as np
 import rpy2.robjects as robjects
