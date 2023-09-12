@@ -28,6 +28,7 @@
 * [Licensing Overview](#licensingoverview)
 * [Authors](#authors)
 * [Acknowledgments](#acknowledgement)
+* [Notes](#notes)
 
 ## 🧐 About <a name = "about"></a>
 So far if you have an Aleph Alpha account for example and would like to share it in your organization with many people you would have to share the account credentials with everyone that would give too many rights to everyone. The playground however is only accessible through those extensive credentials. Therefore, this projects provides a front-end to create an abstraction and further provides some basic wrappers for LLM use cases.
