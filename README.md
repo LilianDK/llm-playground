@@ -23,7 +23,6 @@
   * [Use case 2: Summarization](#summarization)
   * [Use case 3: Question and answering](#qna)
   * [Use case 4: Document processing](#dp)
-  * [Configuration of prompt input files](#configprompt)
   * [Configuration of front-end color scheme input files](#configcolor)
 * [TODO](#todo)
 * [Licensing Overview](#licensingoverview)
@@ -39,7 +38,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 What things you need to run the software:
 - [Docker](https://www.docker.com/) 
-
+- Aleph Alpha Account or Token (see image description below)
 ![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Acount.png)
 
 ## 🎈 Usage <a name="usage"></a>
@@ -189,3 +188,6 @@ docker-compose up --build
 
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 - Bootswatch inspired me to make it at least a little beautiful
+
+## 🎉 Notes <a name = "notes"></a>
+- renv::snapshot(type = all)
