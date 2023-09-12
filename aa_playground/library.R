@@ -51,7 +51,7 @@ options(shiny.reactlog = TRUE)
 # Initializing PYENV -----------------------------------------------------------
 # Required if local development environment has to be set 
 print("START: Initializing PYENV------------------------------------------------")
-local_development = FALSE
+local_development = TRUE
 
 if (local_development) {
   # Creating virtual pyenv

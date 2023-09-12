@@ -60,7 +60,6 @@ server <- function(input, output,session) {
     token = input$text_token
 
     # processing of PDF file
-    print(input$selectedPage)
     path = getwd()
     pdf_file = glue("{path}/www/0.pdf")
     txt = pdf_text(pdf_file)
@@ -76,8 +75,9 @@ server <- function(input, output,session) {
   
   rawoutput20 <- eventReactive(input$button22,{
     
+    token = input$text_token
     req(input$file_input9)
-    print(input$file_input9$datapath)
+    
     file.copy(input$file_input9$datapath,"www", overwrite = T)
     filepath = input$file_input9$datapath
     
@@ -107,13 +107,13 @@ server <- function(input, output,session) {
     colnames(df) = c("segment","from","to","text","tokens")
       
     string = ""
-    for (x in 3:nrow(df)) {
+    for (x in 1:nrow(df)) {
       string = glue("{string}{df[x,4]}")
     }
       
     if (sum(df[,5]) <= 2048) {
       document = as.character(string)
-      summary = summary(input$token, document)
+      summary = summary(token, document)
       summary
     } else {
       summary = "File too large."
@@ -130,6 +130,12 @@ server <- function(input, output,session) {
     result = rawoutput20()
     result = result$val1
   })
+  
+  output$summary <- renderText({ 
+    result = rawoutput20()
+    result = result$val2
+  })|>
+    bindEvent(input$button22)
   
   # Logging of the parameter settings for the prompt report
   parameterframe <- eventReactive(input$button1,{ 

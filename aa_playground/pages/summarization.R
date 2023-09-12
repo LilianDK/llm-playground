@@ -5,9 +5,6 @@ summarization =     nav_panel(title = "Summarization",
                                        card(min_height = 100,
                                             card_header("PDF:"),
                                             uiOutput("pdfview"),
-                                           # shinycssloaders::withSpinner(
-                                          #    textOutput("transcription")
-                                        #  ),
                                             fileInput("file_input", "upload file ( . pdf format only)", accept = c(".pdf")),
                                             fileInput("file_input9", "upload file ( . wav, mp3, mp4 format only)", accept = c(".wav",".mp3",".mp4"))
                                        )
@@ -27,12 +24,21 @@ summarization =     nav_panel(title = "Summarization",
                                 ),
                                 
                                 card(min_height = 100,
+                                  card_header("Machine generated summary:"),
                                   fluidRow(
                                     shinycssloaders::withSpinner(
-                                      textOutput("summary")
-                                    ),
-                                  ),
-                                  
-                                )
+                                      shinycssloaders::withSpinner(
+                                        textOutput("summary")
+                                      ),
+                                    ))),
+                                
+                                card(min_height = 100,
+                                     card_header("Transcription from audio:"),
+                                     fluidRow(
+                                       shinycssloaders::withSpinner(
+                                         shinycssloaders::withSpinner(
+                                           textOutput("transcription")
+                                         ),
+                                       )))
                               )
 )
