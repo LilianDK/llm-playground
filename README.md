@@ -42,41 +42,6 @@ What things you need to run the software:
 
 ![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Acount.png)
 
-With reticulate there might be some tidious issues and at the end of the day we figured it is best to set use_python() in library.R. Please configure yours under "USERNAME" (or more):
-```
-# Required if local development environment has to be set due to reticulate having issues to find the right path
-local_development = FALSE
-
-packages <- c("shiny","bslib","reticulate","TheOpenAIR","glue",
-              "DT","pdftools","knitr","rmarkdown","thematic","remotes")
-
-installed_packages <- packages %in% rownames(installed.packages())
-if (any(installed_packages == FALSE)) {
-  install.packages(packages[!installed_packages])
-}
-#remotes::install_github("dreamRs/shinyWidgets")
-
-library(shiny)
-library(shinyWidgets)
-library(bslib)
-library(thematic)
-library(reticulate)
-library(TheOpenAIR)
-library(glue)
-library(DT)
-library(pdftools)
-library(rmarkdown)
-
-if (local_development) {
-  
-  # Put the path to your python environment here
-  use_python("/Users/USERNAME/.pyenv/versions/3.11.4/bin/python")
-}
-
-py_install("aleph-alpha-client")
-py_install("Jinja2")
-```
-
 ## 🎈 Usage <a name="usage"></a>
 The front-end allows you to use the plain playground just like in the respective account to configure and try out prompt engineering. Further, there is also a functionality that allows you uploading a PDF file for which the selected page will be summarized. Finally, there is also a basic chat functionality to chat with the world knowledge of the llm.
 
@@ -85,145 +50,49 @@ https://github.com/LilianDK/llm-playground/assets/13328959/95576f84-5bc5-49b1-b9
 ## Use case 1: Aleph Alpha Playground Dupe <a name="aaplayground"></a>
 The first use case is the dupe version of the [Aleph Alpha Playround](https://app.aleph-alpha.com/). So far if you have an Aleph Alpha account for example and would like to share it in your organization with many people you would have to share the account credentials with everyone that would give too many rights to everyone. The playground however is only accessible through those extensive credentials. Therefore, this projects provides a front-end to create an abstraction. 
 
+Configuration of the chat prompt:
+
+*This chat prompt is a very simple one and intended to be used to chat with the world knowledge of the foundation model.*
+```
+### Instruction: You are a chatbot and you answer questions.
+### Input:{{chatmessage}}
+### Response:
+```
+
 ## Use case 2: Summarization <a name="summarization"></a>
 The second use case show cases a simple summary of input text. Only the selected page is summarized. 
 
-## Use case 3: Question and Answering <a name="qna"></a>
-The third use case show cases question and answering (with natural language generation) in which a given input document can be queried. The output is the display of the most suitable n text chunks and a machine generated answer in natural language.
-
-## Use case 4: Document processing <a name="dp"></a>
-The forth use case show cases document processing in which a given input document can be queried for specific entities. 
-
-## Configuration of prompt input files <a name="configprompt"></a>
 You can find the summarization and chat prompt in the "prompts" folder.
 
 Configuration of the summarization prompt:
 
-**token**: Identification and authorization to access Aleph Alpha API. <br />
-**document**: Input document that shall be summarized. <br />
 *This summarization is a very simple one and is intended for rather short text input summarizations (e.g. 1 A4 page). It is not suited for long text input summarizations.* <br />
 ```
-import os
-
-from jinja2 import Template
-from aleph_alpha_client import Client, CompletionRequest, Prompt
-
-def summary(token, document):
-  with open(os.path.join("prompts/summarization.j2")) as f:
-      prompt = Template(f.read())
-            
-  prompt_text = prompt.render(document=document)
-  
-  print(prompt_text)
-  client = Client(token)
-  request = CompletionRequest(
-      prompt=Prompt.from_text(prompt_text),
-      maximum_tokens = 260,
-      best_of = 2,
-      temperature = 0,
-      top_k = 0,
-      top_p = 0,
-      presence_penalty = 0,
-      frequency_penalty = 0,
-  )
-  response = client.complete(request, model = "luminous-extended-control")
-  print(response)
-  return response.completions[0].completion
+### Instruction: Summarize the input.
+### Input:{{document}}
+### Response:
 ```
 
-Configuration of the chat prompt:
-
-**token**: Identification and authorization to access Aleph Alpha API. <br />
-**request**: Input question in natural language. <br />
-*This chat prompt is a very simple one and intended to be used to chat with the world knowledge of the foundation model.*
-```
-import os
-
-from jinja2 import Template
-from aleph_alpha_client import Client, CompletionRequest, Prompt
-
-def chat(token, request):
-  with open(os.path.join("prompts/chat.j2")) as f:
-      prompt = Template(f.read())
-            
-  prompt_text = prompt.render(chatmessage=request)
-  
-  print(prompt_text)
-  client = Client(token)
-  request = CompletionRequest(
-      prompt=Prompt.from_text(prompt_text),
-      maximum_tokens = 124,
-      temperature = 0,
-  )
-  response = client.complete(request, model = "luminous-extended-control")
-  print(response)
-  return response.completions[0].completion
-```
+## Use case 3: Question and Answering <a name="qna"></a>
+The third use case show cases question and answering (with natural language generation) in which a given input document can be queried. The output is the display of the most suitable n text chunks and a machine generated answer in natural language.
 
 Configuration of the embedding function:
 
-**token**: Identification and authorization to access Aleph Alpha API. <br />
-**text_chunks**: Input document has been split into text chunks (e.g. per page or per paragraph etc.). <br />
-**query**: Input question in natural language. <br />
-**n**: Top n text_chunks output that are most similar according to cosine similarity. <br />
-*This embedding function is configured for one way information retrieval and not for chatting, which would be bi-directional.*
 ```
-import os
-import numpy as np
-import rpy2.robjects as robjects
+### Instruction: Answer the given question by the provided document. 
+### Input: {{string}}
+### Response: {{query}} Der Sachverhalt ist wir folgt:
+```
 
-from aleph_alpha_client import Client
+## Use case 4: Document processing <a name="dp"></a>
+The forth use case show cases document processing in which a given input document can be queried for specific entities. 
 
-from typing import Sequence
-from aleph_alpha_client import Prompt, SemanticEmbeddingRequest, SemanticRepresentation
-import math
-
-# helper function to embed text using the symmetric or asymmetric model
-def embed(client, text: str, representation: SemanticRepresentation):
-    request = SemanticEmbeddingRequest(prompt=Prompt.from_text(text), representation=representation)
-    result = client.semantic_embed(request, model="luminous-base")
-    return result.embedding
-
-# helper function to calculate the cosine similarity between two vectors
-def cosine_similarity(v1: Sequence[float], v2: Sequence[float]) -> float:
-    "compute cosine similarity of v1 to v2: (v1 dot v2)/{||v1||*||v2||)"
-    sumxx, sumxy, sumyy = 0, 0, 0
-    for i in range(len(v1)):
-        x = v1[i]; y = v2[i]
-        sumxx += x*x
-        sumyy += y*y
-        sumxy += x*y
-    return sumxy/math.sqrt(sumxx*sumyy)
-
-# helper function to print the similarity between the query and text embeddings
-def print_result(texts, query, query_embedding, text_embeddings):
-    for i, text in enumerate(texts):
-        print(f"Similarity between '{query}' and '{text[:25]}...': {cosine_similarity(query_embedding, text_embeddings[i])}")
-
-def semanticsearch(token, text_chunks, query, n):
-    client = Client(token)
-
-    asymmetric_query = embed(client, query, SemanticRepresentation.Query)
-    asymmetric_embeddings = [embed(client, text, SemanticRepresentation.Document) for text in text_chunks]
-
-    # Search for the most similar split in large_text to the query and output its index
-    results = [cosine_similarity(asymmetric_query, embedding) for embedding in asymmetric_embeddings]
-    
-    results = np.array(results)
-    
-    sorted_results = np.argsort(results)
-    
-    top_n = sorted_results[-n:]
-    
-    top_n = top_n[::-1]
-    
-    top_index = np.argmax([cosine_similarity(asymmetric_query, embedding) for embedding in asymmetric_embeddings])
-    
-    
-    print(f"The most similar split to the query is at index {top_index}:\n {text_chunks[top_index]}")
-    print(type(top_n))
-
-    return top_n
+```
+### Instruction: Please extract relevant information from OCR-read document ("{{namedentity1}}","{{namedentity2}}","{{namedentity3}}").
+If several values are present format them as a list.
+If value cannot be extracted use "values":"NotAvail".
+### Input: {{document}}
+### Output: 
 ```
 
 ## Configuration of front-end color scheme input files <a name="configcolor"></a>
