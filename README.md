@@ -185,7 +185,7 @@ docker-compose up --build
 ## ✍️ Authors <a name = "authors"></a>
 - [@LilianDK](https://github.com/LilianDK/llm-playground) - Idea & Initial work
 - [@mfmezger](https://github.com/mfmezger) - Supporting with the nasty Python and Docker stuff
-- [@momper14](https://github.com/momper14) - Supporting with the Docker compilation stuff
+- [@momper14](https://github.com/momper14) - Supporting with the Docker compilation stuff and writing of the Aleph Alpha Client in R
 
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 - Bootswatch inspired me to make it at least a little beautiful
