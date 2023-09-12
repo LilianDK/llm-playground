@@ -252,6 +252,10 @@ git clone https://github.com/LilianDK/llm-playground.git
 ```
 docker compose up --build
 ```
+Old version if above does not work:
+```
+docker-compose up --build
+```
 (approx. more than 5 minutes)
 
 ## ⛏️ Issues <a name = "issues"></a>
