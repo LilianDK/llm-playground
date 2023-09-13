@@ -31,6 +31,7 @@
   * [Configuration of port (coming soon)](#configport)
   * [Configuration of sites (coming soon)](#configsites)
 * [TODO](#todo)
+  * [Issues](#issues)
   * [Features](#features)
   * [Non-functionals](#nfrs)
 * [Licensing Overview](#licensingoverview)
@@ -228,12 +229,12 @@ git clone https://github.com/LilianDK/llm-playground.git
 **Step 3: Run app.R**
 
 **Step 4: Enter your token on the left. You do not need a USER ID (because this is for other enterprise purposes).** 
-
-## ⛏️ Issues <a name = "issues"></a>
+  
+## ⛏️ TO DO <a name = "todo"></a>
+## Issues <a name = "issues"></a>
 - For the question and answering part one can select top n chunks to be displayed. However, only top n - 1 chunks will be displayed.
 - Output of the score is not correct.
   
-## ⛏️ TO DO <a name = "todo"></a>
 ## Features <a name = "features"></a>
 - Calculations everywhere
 - Database for token tracking
