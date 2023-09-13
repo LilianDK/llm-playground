@@ -137,6 +137,7 @@ docker run -p 3838:3838 --rm schiggy89/llm-playground:latest
 ```
 This step might take a while until it startet.
 
+
 **Step 3: Start a browser and enter "localhost:3838" to open the application** 
 ```
 docker run -p 3838:3838 --rm schiggy89/llm-playground:latest
@@ -160,11 +161,17 @@ In the following we describe how you can deploy this application by building you
 git clone https://github.com/LilianDK/llm-playground.git
 ```
 
-**Step 2: Configurate what ever you need to and build the docker**
-```
-docker buildx build --no-cache --platform=linux/amd64,linux/arm64 -t YOURTAG/PROJECTNAME:latest --push .
-```
+**Step 2: Configurate what ever you need to and build the docker image**
 
+For norma docker image builds:
+```
+docker build -t YOURTAG/PROJECTNAME:latest --push .
+```
+For multiarch build, that is for diverse operating systems, you need to run following instruction if it is your first time:
+```
+docker buildx create --name multiarch --driver docker-container --use
+```
+Then for all builds afterwards and only:
 ```
 docker buildx build --no-cache --platform=linux/amd64,linux/arm64 -t YOURTAG/PROJECTNAME:latest --push .
 ```
@@ -174,12 +181,42 @@ docker pull YOURTAG/PROJECTNAME:latest
 docker run -p 3838:3838 --rm YOURTAG/PROJECTNAME:latest
 ```
 
-Open a webbrowser and enter "localhost:3838" to see the LLM Playground Web UI.
+**Step 3: Start the downloaded Docker image (=application)** 
+```
+docker run -p 3838:3838 --rm schiggy89/llm-playground:latest
+```
+This step might take a while until it startet.
 
-Optional:
+
+**Step 3: Start a browser and enter "localhost:3838" to open the application** 
+```
+docker run -p 3838:3838 --rm schiggy89/llm-playground:latest
+```
+
+Optional if you want to share you image like in the first deployment option:
 ```
 docker push YOURTAG/PROJECTNAME
 ```
+## 🚀 Deployment using R Studio <a name = "deployment3"></a>
+In the following we describe how you can "deploy" this application through R Studio.
+
+| Pros     | Cons    | 
+| -------- | ------- |
+| Visual configuration possible  | No Time efficient set-up |
+| Other configuration of inputs possible | Messing around with the console |
+
+**Step 0: Open your console and cd to the filepath where you want to save the application**
+
+**Step 1: Download the repository (=application)**
+```
+git clone https://github.com/LilianDK/llm-playground.git
+```
+
+**Step 2: Open the aa_llmpla**
+```
+git clone https://github.com/LilianDK/llm-playground.git
+```
+
 ## ⛏️ Issues <a name = "issues"></a>
 - For the question and answering part one can select top n chunks to be displayed. However, only top n - 1 chunks will be displayed.
 - Output of the score is not correct.
