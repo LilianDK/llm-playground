@@ -31,6 +31,8 @@
   * [Configuration of port (coming soon)](#configport)
   * [Configuration of sites (coming soon)](#configsites)
 * [TODO](#todo)
+  * [Features](#features)
+  * [Non-functionals](#nfrs)
 * [Licensing Overview](#licensingoverview)
 * [Authors](#authors)
 * [Acknowledgments](#acknowledgement)
@@ -120,8 +122,8 @@ What things you need to run the software:
 - Aleph Alpha Account or Token (see image description below)
 ![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Acount.png)
 
-## 🏁 Deployment or usage of the application <a name = "deployment0"></a>
-## 🚀 Deployment using a Docker Image <a name = "deployment1"></a>
+## 🚀 Deployment or usage of the application <a name = "deployment0"></a>
+## Deployment using a Docker Image <a name = "deployment1"></a>
 
 In the following we describe how you can deploy this application with a Docker image.
 
@@ -151,7 +153,7 @@ docker run -p 3838:3838 --rm schiggy89/llm-playground:latest
 
 **Step 4: Enter your token on the left. You do not need a USER ID (because this is for other enterprise purposes).** 
 
-## 🚀 Deployment building a Docker Image <a name = "deployment2"></a>
+## Deployment building a Docker Image <a name = "deployment2"></a>
 
 In the following we describe how you can deploy this application by building your own a Docker image and with some configurations of the inputs.
 
@@ -206,7 +208,7 @@ docker push YOURTAG/PROJECTNAME
 
 **Step 4: Enter your token on the left. You do not need a USER ID (because this is for other enterprise purposes).** 
 
-## 🚀 Deployment using R Studio <a name = "deployment3"></a>
+## Deployment using R Studio <a name = "deployment3"></a>
 In the following we describe how you can "deploy" this application through R Studio.
 
 | Pros     | Cons    | 
@@ -232,19 +234,22 @@ git clone https://github.com/LilianDK/llm-playground.git
 - Output of the score is not correct.
   
 ## ⛏️ TO DO <a name = "todo"></a>
+## Features <a name = "features"></a>
 - Calculations everywhere
-- ShinyProxy
 - Database for token tracking
 - https://github.com/momper14/alephAlphaClient
-- Tests
 - Audio recording
 - Hate blocker
 - Improve the summarization prompt (so far just a bad prompt is embedded)
 - Included other LLM API, maybe cohere
 - Adding chatbot functionality
-- Prompt Catalogue
 - https://github.com/daattali/shinyscreenshot/
 - Test framework for document processing
+  
+## Non-functionals <a name = "nfrs"></a>
+- ShinyProxy
+- Tests
+- Prompt Catalogue
 - Websocket (for the audio transcription display on the front-end)
 
 ## ⛏️ Licensing Overview <a name = "licensingoverview"></a>
