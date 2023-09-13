@@ -1,0 +1,5 @@
+aleph-alpha-client
+Jinja2
+numpy
+rpy2
+markdown
