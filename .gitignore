@@ -57,3 +57,8 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Testfiles
+aa_playground/www/*.mp4
+aa_playground/www/*.wav
+aa_playground/www/*.pdf
