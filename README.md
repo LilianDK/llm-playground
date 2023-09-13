@@ -144,6 +144,7 @@ docker push YOURTAG/PROJECTNAME
 - https://github.com/momper14/alephAlphaClient
 - Tests
 - Audio recording
+- Hate blocker
 - Improve the summarization prompt (so far just a bad prompt is embedded)
 - Included other LLM API, maybe cohere
 - Adding chatbot functionality
