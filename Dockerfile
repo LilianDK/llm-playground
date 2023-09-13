@@ -1,38 +1,52 @@
 FROM rocker/r-ubuntu:22.04
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    sudo \ 
     pandoc \
     pandoc-citeproc \
     libcurl4-gnutls-dev \
     libcairo2-dev \
     libxt-dev \
-    libssl-dev \
     libssh2-1-dev \
     libpoppler-cpp-dev \
-    git \ 
+    git \
+    libavfilter-dev \
+    libharfbuzz-dev libfribidi-dev\
+    libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev \
+    texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra \
+    # pyenv
+    build-essential libssl-dev zlib1g-dev \
+    libbz2-dev libreadline-dev libsqlite3-dev curl \
+    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # poppler utils for pdf tools
-COPY Rprofile.site /etc/R
-ENV _R_SHLIB_STRIP_=true
+ENV _R_SHLIB_STRIP_ true
+
+ENV RUNS_IN_CONTAINER TRUE
 
 RUN install.r remotes renv
 
-RUN echo "local(options(shiny.port = 3838, shiny.host = '0.0.0.0'))" > /usr/lib/R/etc/Rprofile.site
+COPY Rprofile.site /etc/R
 
-RUN addgroup --system app && adduser --system --ingroup app app
+RUN chown 1000:1000 -R /usr/local/lib/R
+
 WORKDIR /home/app
 
-COPY ./renv.lock .
-RUN Rscript -e "options(renv.consent = TRUE);renv::restore(lockfile = '/home/app/renv.lock', repos = c(CRAN='https://packagemanager.rstudio.com/all/__linux__/jammy/latest'))"
-RUN rm -f renv.lock
+RUN chown 1000:1000 -R /home/app
 
-COPY aa_playground app
+USER 1000:1000
 
-# RUN 
-RUN chown app:app -R /home/app
-USER app
+RUN R -e "renv::init()"
+
+COPY --chown=1000:1000 aa_playground/renv.lock .
+
+RUN R -e "renv::restore()"
+
+COPY --chown=1000:1000 aa_playground /home/app
+
+RUN Rscript library.R
+
+# RUN
 EXPOSE 3838
 
-CMD ["R", "-e", "shiny::runApp('/home/app/app')"]
+CMD ["R", "-e", "shiny::runApp('/home/app', host='0.0.0.0', port=3838)"]

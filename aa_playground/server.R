@@ -1,4 +1,7 @@
 source("configurations/lookup.R")
+
+use_virtualenv("py_backend")
+
 source_python("api_clients/aa_chat.py")
 source_python("api_clients/aa_client.py")
 source_python("api_clients/aa_qna.py")
