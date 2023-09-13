@@ -142,6 +142,7 @@ docker-compose up --build
 - https://github.com/momper14/alephAlphaClient
 - https://github.com/daattali/shinyscreenshot/
 - Test framework for document processing
+- Websocket (for the audio transcription display on the front-end)
 
 ## ⛏️ Licensing Overview <a name = "licensingoverview"></a>
 
