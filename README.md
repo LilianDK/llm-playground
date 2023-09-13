@@ -16,16 +16,20 @@
 
 ## 📝 Table of Contents
 * [About](#about)
-* [Usage](#usage)
+* [Showcases](#usage)
   * [Use case 1: Aleph Alpha Playground Dupe](#aaplayground)
   * [Use case 2: Summarization](#summarization)
   * [Use case 3: Question and answering](#qna)
   * [Use case 4: Document processing](#dp)
-  * [Configuration of front-end color scheme input files](#configcolor)
 * [Getting Started](#getting_started)
-* [Deployment using a docker image](#deployment1)
-* [Deployment building a docker image](#deployment2)
-* [Deployment using R Studio](#deployment3)
+* [Deployment or usage](#deployment0)
+  * [Deployment using a docker image](#deployment1)
+  * [Deployment building a docker image](#deployment2)
+  * [Deployment using R Studio](#deployment3)
+* [Configuration](#configuration)
+  * [Configuration of front-end color scheme input files](#configcolor)
+  * [Configuration of port (coming soon)](#configport)
+  * [Configuration of sites (coming soon)](#configsites)
 * [TODO](#todo)
 * [Licensing Overview](#licensingoverview)
 * [Authors](#authors)
@@ -88,6 +92,7 @@ If value cannot be extracted use "values":"NotAvail".
 ### Output: 
 ```
 
+## Configuration <a name="configuration"></a>
 ## Configuration of front-end color scheme input files <a name="configcolor"></a>
 For changing the color scheme on the front-end two files need to be touched that are located in the "www" folder.
 
@@ -115,6 +120,7 @@ What things you need to run the software:
 - Aleph Alpha Account or Token (see image description below)
 ![alt text](https://github.com/LilianDK/llm-playground/blob/main/README_PICS/AA_Acount.png)
 
+## 🏁 Deployment or usage of the application <a name = "deployment0"></a>
 ## 🚀 Deployment using a Docker Image <a name = "deployment1"></a>
 
 In the following we describe how you can deploy this application with a Docker image.
