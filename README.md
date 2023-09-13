@@ -197,6 +197,9 @@ Optional if you want to share you image like in the first deployment option:
 ```
 docker push YOURTAG/PROJECTNAME
 ```
+
+**Step 4: Enter your token on the left. You do not need a USER ID (because this is for other enterprise purposes).** 
+
 ## 🚀 Deployment using R Studio <a name = "deployment3"></a>
 In the following we describe how you can "deploy" this application through R Studio.
 
@@ -212,10 +215,11 @@ In the following we describe how you can "deploy" this application through R Stu
 git clone https://github.com/LilianDK/llm-playground.git
 ```
 
-**Step 2: Open the aa_llmpla**
-```
-git clone https://github.com/LilianDK/llm-playground.git
-```
+**Step 2: Open the aa_playground.Rproj**
+
+**Step 3: Run app.R**
+
+**Step 4: Enter your token on the left. You do not need a USER ID (because this is for other enterprise purposes).** 
 
 ## ⛏️ Issues <a name = "issues"></a>
 - For the question and answering part one can select top n chunks to be displayed. However, only top n - 1 chunks will be displayed.
