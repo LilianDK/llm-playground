@@ -129,19 +129,25 @@ docker run -p 3838:3838 --rm YOURTAG/PROJECTNAME:latest
 
 Open a webbrowser and enter "localhost:3838" to see the LLM Playground Web UI.
 
+Optional:
+```
+docker push YOURTAG/PROJECTNAME
+```
 ## ⛏️ Issues <a name = "issues"></a>
 - For the question and answering part one can select top n chunks to be displayed. However, only top n - 1 chunks will be displayed.
 - Output of the score is not correct.
   
 ## ⛏️ TO DO <a name = "todo"></a>
+- Calculations everywhere
+- ShinyProxy
+- Database for token tracking
+- https://github.com/momper14/alephAlphaClient
+- Tests
+- Audio recording
 - Improve the summarization prompt (so far just a bad prompt is embedded)
 - Included other LLM API, maybe cohere
 - Adding chatbot functionality
-- ShinyProxy
 - Prompt Catalogue
-- Calculations everywhere
-- Database for token tracking
-- https://github.com/momper14/alephAlphaClient
 - https://github.com/daattali/shinyscreenshot/
 - Test framework for document processing
 - Websocket (for the audio transcription display on the front-end)
@@ -153,7 +159,7 @@ Open a webbrowser and enter "localhost:3838" to see the LLM Playground Web UI.
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [R](https://www.r-project.org/)     | 4.3.1 | GPL-2/GPL-3 |
 | <img src="https://avatars.githubusercontent.com/u/274806?s=48&v=4" width="25"> [shinyproxy](https://github.com/openanalytics/shinyproxy)     | 3.0.2 | Apache-2.0 (scheduled for integration) |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [Aleph Alpha Client](https://github.com/momper14/alephAlphaClientl)     | None | None (scheduled for integration) |
-| <img src="https://www.r-project.org/Rlogo.png" width="25"> [audio](https://search.r-project.org/CRAN/refmans/audio/html/record.html)  | 0.1.11 | MIT (idea rejected and not integrated because it would be hard to map from a docker to a microphone periphery) |
+| <img src="https://www.r-project.org/Rlogo.png" width="25"> [audio](https://search.r-project.org/CRAN/refmans/audio/html/record.html)  | 0.1.11 | MIT (scheduled for integration) |
 | <img src="https://github.com/bnosac/audio.whisper/blob/master/tools/logo-audio-whisper-x100.png" width="25"> [OpenAI Whisper](https://github.com/bnosac/audio.whisper)     | 0.2.1-1 | MIT |
 | <img src="https://rstudio.github.io/renv/logo.svg" width="25"> [renv](https://rstudio.github.io/renv/articles/renv.html)     | 1.0.2 | MIT |
 | <img src="https://glue.tidyverse.org/logo.png" width="25"> [Glue](https://glue.tidyverse.org/)     | 1.6.2 | MIT |
