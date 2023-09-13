@@ -119,13 +119,15 @@ background: linear-gradient(90deg, rgba(6,73,140,1) 28%, rgba(21,146,227,1) 63%,
 git clone https://github.com/LilianDK/llm-playground.git
 ```
 ```
-docker compose up --build
-```
-Old version if above does not work:
-```
-docker-compose up --build
+docker buildx build --no-cache --platform=linux/amd64,linux/arm64 -t YOURTAG/PROJECTNAME:latest --push .
 ```
 (approx. more than 5 minutes)
+```
+docker pull YOURTAG/PROJECTNAME:latest
+docker run -p 3838:3838 --rm YOURTAG/PROJECTNAME:latest
+```
+
+Open a webbrowser and enter "localhost:3838" to see the LLM Playground Web UI.
 
 ## ⛏️ Issues <a name = "issues"></a>
 - For the question and answering part one can select top n chunks to be displayed. However, only top n - 1 chunks will be displayed.
