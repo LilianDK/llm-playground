@@ -24,7 +24,7 @@
   * [Configuration of front-end color scheme input files](#configcolor)
 * [Getting Started](#getting_started)
 * [Deployment using a docker image](#deployment1)
-* [Deployment using building a docker image](#deployment2)
+* [Deployment building a docker image](#deployment2)
 * [Deployment using R Studio](#deployment3)
 * [TODO](#todo)
 * [Licensing Overview](#licensingoverview)
