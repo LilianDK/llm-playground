@@ -14,7 +14,7 @@ def qna(token, string, query):
   client = Client(token)
   request = CompletionRequest(
       prompt=Prompt.from_text(prompt_text),
-      maximum_tokens = 64,
+      maximum_tokens = 128,
       best_of = 2,
       temperature = 0,
       top_k = 0,
@@ -24,7 +24,7 @@ def qna(token, string, query):
       repetition_penalties_include_prompt = True,
       repetition_penalties_include_completion = True,
   )
-  response = client.complete(request, model = "luminous-extended-control")
+  response = client.complete(request, model = "luminous-supreme-control")
   print(response)
   
   answer = response.completions[0].completion

@@ -1,7 +1,7 @@
 # this is the subpage for showcasing summarization with LLMs
 summarization =     nav_panel(title = "Summarization", 
                               fluidRow(
-                                column(width = 8,
+                                column(width = 6,
                                        card(min_height = 100,
                                             card_header("PDF:"),
                                             uiOutput("pdfview"),
@@ -9,8 +9,8 @@ summarization =     nav_panel(title = "Summarization",
                                             fileInput("file_input9", "upload file ( . wav, mp3, mp4 format only)", accept = c(".wav",".mp3",".mp4"))
                                        )
                                 ),
-                                column(width = 4,
-                                       card(min_height = 100,
+                                column(width = 6,
+                                       card(min_height = 500,
                                             card_header("Calculation:"),
                                             h6("Estimated total tokens:"),
                                             textOutput("sumtoken"),
@@ -22,23 +22,25 @@ summarization =     nav_panel(title = "Summarization",
                                             actionButton("button22", "Summarize Audio", icon("paper-plane"), style = config_button, width = "230px")
                                        )
                                 ),
-                                
+
                                 card(min_height = 100,
-                                  card_header("Machine generated summary:"),
-                                  fluidRow(
-                                    shinycssloaders::withSpinner(
+                                  card_header("Machine generated summary from PDF:"),
                                       shinycssloaders::withSpinner(
                                         textOutput("summary")
                                       ),
-                                    ))),
-                                
+                                    ),
+                                card(
+                                  card_header("Machine generated summary from Audio:"),
+                                      shinycssloaders::withSpinner(
+                                        textOutput("summary2")
+                                      )
+                                ),
                                 card(min_height = 100,
                                      card_header("Transcription from audio:"),
                                      fluidRow(
-                                       shinycssloaders::withSpinner(
                                          shinycssloaders::withSpinner(
                                            textOutput("transcription")
                                          ),
-                                       )))
+                                       ))
                               )
 )

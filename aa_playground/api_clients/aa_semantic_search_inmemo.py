@@ -54,4 +54,4 @@ def semanticsearch(token, text_chunks, query, n):
     print(f"The most similar split to the query is at index {top_index}:\n {text_chunks[top_index]}")
     print(type(top_n))
 
-    return top_n
+    return results

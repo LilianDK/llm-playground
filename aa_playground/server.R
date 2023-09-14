@@ -19,6 +19,11 @@ server <- function(input, output,session) {
   # Communication with aleph alpha compute center for completion job------------
 
     rawoutput <- eventReactive(input$button1,{
+      token = input$text_token
+      prompt = input$text_prompt 
+      model = input$select_model
+      stop_sequences = "###"
+      maximum_tokens = as.integer(input$num_maxtoken) 
       
         if (input$switch1 == TRUE) {
           
@@ -31,12 +36,15 @@ server <- function(input, output,session) {
 
         } else {
           
+          if (maximum_tokens <= 0) {
+            return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: Negative or zero value at maximum token input. Do me a favour please enter something larger then 0. Thank you!")
+          } else if (count_tokens(prompt)  > 2000 ) 
+          {
+            return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: Likely too much text for this light-weight demo application. The max. tokens that can be processed must be under 2.000. Thank you!")
+          } else 
+          {
           # Completion
-          token = input$text_token
-          prompt = input$text_prompt 
-          model = input$select_model
-          stop_sequences = "###"
-          maximum_tokens = as.integer(input$num_maxtoken) 
+
           n = as.integer(input$slider_bestof)
           if (n == 1) { n = 2 } else {}
           best_of = as.integer(n)
@@ -49,7 +57,8 @@ server <- function(input, output,session) {
           
           text = completion(token, prompt, model, stop_sequences, maximum_tokens, best_of, temperature, top_k, top_p, presence_penalty, frequency_penalty, n)
           return(text)
-        }
+        }}
+      
     })
     
     output$text_prompt3 <- renderText({ 
@@ -58,18 +67,34 @@ server <- function(input, output,session) {
       bindEvent(input$button1)
 
   # Communication with aleph alpha compute center for summary job---------------
+
   rawoutput2 <- eventReactive(input$button2,{
-
+    
     token = input$text_token
-
+    
     # processing of PDF file
     path = getwd()
     pdf_file = glue("{path}/www/0.pdf")
     txt = pdf_text(pdf_file)
+    maxpage = length(txt)
     document = txt[input$selectedPage]
-    summary = summary(token, document)
-
-    return(summary)
+    
+    if (input$selectedPage <= 0) {
+      return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: Negative page input. Do me a favour please enter something within the range of the document. Thank you!")
+    } else if (input$selectedPage > maxpage)
+    {
+      return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: Out of page range input. Do me a favour please enter something within the range of the document. Thank you!")
+    } else if (length(token) == 0)
+    {
+      return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: No token has been entered. Thank you!")
+    } else if (count_tokens(document)  > 2000 ) 
+    {
+      return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: Likely too much text for this light-weight demo application. The max. tokens that can be processed must be under 2.000. Thank you!")
+    } else 
+    {
+      summary = summary(token, document)
+      return(summary)
+    }
   })
     
   output$summary <- renderText({ 
@@ -134,7 +159,7 @@ server <- function(input, output,session) {
     result = result$val1
   })
   
-  output$summary <- renderText({ 
+  output$summary2 <- renderText({ 
     result = rawoutput20()
     result = result$val2
   })|>
@@ -151,65 +176,63 @@ server <- function(input, output,session) {
   
   # Communication with aleph alpha compute center for qna job-------------------
   rawoutput9 <- eventReactive(input$button5,{
+    
+    token = input$text_token
+    query = input$text_prompt10 
+    
+    # Data pre-processing step: Parsing PDF input to input format for semantic search
+    pdf_file = "www/0.pdf"
+    txt = pdf_text(pdf_file)
+    #document = txt[1]
+    
+    df = data.frame(matrix(nrow = 0, ncol = 0)) 
+    for (x in 1:nrow(as.data.frame(txt))) {
+      newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) # chunk after each paragraph
+      newrows['page'] <- x # add page number
+      colnames(newrows) = colnames(df)
+      df = rbind(df, newrows)
+    } 
+    
+    colnames(df) <- c("Text_chunk","page")
+    
+    df = df[!(is.na(df$Text_chunk) | df$Text_chunk==""), ]
+    text_chunks = as.list(df)
+    
+    # Semantic search
+    #query = "Wieviel Euro muss soll die Beklagte zahlen?"
+    index = semanticsearch(token, as.character(text_chunks$Text_chunk), query, as.integer(n)) 
 
-      token = input$text_token
-      query = input$text_prompt10 
-      
-      # Data pre-processing step: Parsing PDF input to input format for semantic search
-      pdf_file = "www/0.pdf"
-      txt = pdf_text(pdf_file)
-      #document = txt[1]
-      
-      df = data.frame(matrix(nrow = 0, ncol = 0)) 
-      for (x in 1:nrow(as.data.frame(txt))) {
-        newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) # chunk after each paragraph
-        newrows['page'] <- x # add page number
-        colnames(newrows) = colnames(df)
-        df = rbind(df, newrows)
-      } 
-      
-      colnames(df) <- c("Text_chunk","page")
-      
-      df = df[!(is.na(df$Text_chunk) | df$Text_chunk==""), ]
-      text_chunks = as.list(df)
-      
-      # Semantic search
-      #query = "Wieviel Euro muss soll die Beklagte zahlen?"
-      index = semanticsearch(token, text_chunks$Text_chunk, query, as.integer(input$topn)) # 3 austasuchen mit variable von frontend
-      
-      # Data post-processing step: Transform LLM result to expected tabular output format
-      tbl = data.frame(matrix(nrow = 0, ncol = 0)) 
-      
-      for (x in 1:length(index)-1) {
-        newvalue = as.integer(index[x])
-        tbl = rbind(tbl,newvalue)
-      } 
-      
-      vector = as.matrix(tbl[1])
-      
-      results = df[vector,]
-      
-      string = ""
-      for (x in 1:nrow(results)) {
-        string = glue("{string}{results[x,1]}")
-      }
-      
-      string = trimws(gsub("[\r\n]", "", string))
-      
-      qna = qna(token, string, query)
-
-      nlg = trimws(qna[[4]])
-      
-      input_cost = count_tokens(query)/1000 * model_price["luminous-extended-control",1] * task_factor["complete",1] 
-      + count_tokens(nlg)/1000 * model_price["luminous-extended-control",1] * task_factor["complete",2]
-      
-      return(list(
-        val1 = qna,
-        val2 = results,
-        val3 = string,
-        val4 = input_cost
-      ))
-
+    df[,"similarityscore"] = as.data.frame(index)
+    index = df %>% 
+      slice_max(order_by = similarityscore, n = input$topn)
+    index = index[!(index$similarityscore <= 0.49), ]
+    
+    if (length(index) == 0) {
+      qna = "There is no valid answer from the text."
+      input_cost = ""
+    } else {
+    # Data post-processing step: Transform LLM result to expected tabular output format
+    string = ""
+    for (x in 1:nrow(index)) {
+      string = glue("{string}{index[x,1]}")
+    }
+    
+    string = trimws(gsub("[\r\n]", "", string))
+    
+    qna = qna(token, string, query)
+    
+    nlg = trimws(qna[[4]])
+    
+    input_cost = count_tokens(query)/1000 * model_price["luminous-extended-control",1] * task_factor["complete",1] 
+    + count_tokens(nlg)/1000 * model_price["luminous-extended-control",1] * task_factor["complete",2]
+    }
+    return(list(
+      val1 = qna,
+      val2 = index,
+      val3 = string,
+      val4 = input_cost
+    ))
+    
   })
   
   output$text_prompt11 <- renderText({ 
@@ -222,23 +245,18 @@ server <- function(input, output,session) {
   })|>
     bindEvent(input$button5)
   
-  output$text_prompt12 <- renderText({ 
-    result = rawoutput9()
-    result = result$val1
-    localization = result[[3]]
-    score = result[[2]]
-    #nlg = trimws(result[[4]])
-    string = glue("{localization} Score: {(score)}")
-    return(string)
-  })|>
-    bindEvent(input$button5)
-  
-  output$explain_score <- renderDT({ 
+  output$explain_score <- DT::renderDataTable({ 
     result = rawoutput9()
     result = result$val2
-  }, 
-  rownames=FALSE,
-  options = list(dom = 't'))|>
+    result
+    
+    DT::datatable(result,
+                  options = list(
+                    lengthMenu = list(c(5, 15), c('3', '5')),
+                    pageLength = 3
+                  ),
+                  rownames = FALSE)
+  })|>
     bindEvent(input$button5)
   
   # Count cost
@@ -442,7 +460,7 @@ server <- function(input, output,session) {
     })
     
     # Count token
-    output$df = renderDT({  
+    output$df = DT::renderDataTable({  
       pdf_file = filepath
       txt = pdf_text(pdf_file)
       df = data.frame(page="",
@@ -456,10 +474,13 @@ server <- function(input, output,session) {
       } 
       
       df = df[-1,c(1,2)]
-      df
-    }, 
-    rownames=FALSE,
-    options = list(dom = 't'))
+      DT::datatable(df,
+                    options = list(
+                      lengthMenu = list(c(5, 15), c('3', '5')),
+                      pageLength = 3
+                    ),
+                    rownames = FALSE)
+    })
     
     output$summary <- renderText({ 
       rawoutput2()
@@ -514,7 +535,7 @@ server <- function(input, output,session) {
     })
     
     # Count token
-    output$df5 = renderDT({  
+    output$df5 = DT::renderDataTable({  
       pdf_file = filepath
       txt = pdf_text(pdf_file)
       df = data.frame(page="",
@@ -528,10 +549,13 @@ server <- function(input, output,session) {
       } 
       
       df = df[-1,c(1,2)]
-      df
-    }, 
-    rownames=FALSE,
-    options = list(dom = 't'))
+      DT::datatable(df,
+                    options = list(
+                    lengthMenu = list(c(5, 15), c('3', '5')),
+                    pageLength = 3
+                    ),
+                    rownames = FALSE)
+    })
     
   })
   
@@ -543,6 +567,7 @@ server <- function(input, output,session) {
   })
   })
   
-  # Record audio and display 
+  # DAU
+
   
 }

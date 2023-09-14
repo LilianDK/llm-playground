@@ -25,6 +25,8 @@ library(audio.whisper)
 library(thematic)
 library(TheOpenAIR)
 library(knitr)
+library(dplyr)
+
 print("START: Loading whisper model-------------------------------------------")
 whispermodel <- whisper("tiny")
 # whispermodel <- whisper("base")
@@ -57,5 +59,6 @@ print("END: Initializing PYENV--------------------------------------------------
 
 # Creating virtual pyenv
 use_virtualenv("py_backend")
+
 
 

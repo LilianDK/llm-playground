@@ -1,23 +1,20 @@
 # this is the subpage for showcasing question and answering with LLMs
 questionandanswering =     nav_panel(title = "Question and Answering", 
                                      fluidRow(
-                                       column(width = 8,
+                                       column(width = 6,
                                               card(min_height = 100,
                                                    card_header("PDF:"),
                                                    uiOutput("pdfview2"),
                                                    fileInput("file_input2", "upload file ( . pdf format only)", accept = c(".pdf"))
                                               )
                                        ),
-                                       column(width = 4,
+                                       column(width = 6,
                                               card(min_height = 100,
                                                    h5("Machine generated answer:"),
                                                    shinycssloaders::withSpinner(
                                                      textOutput("text_prompt11")
                                                    ),
-                                                   h5("Factual source on which the answer is based:"),
-                                                   textOutput("text_prompt12"),
-                                                   h5("Top three chunks for the answer generation:"),
-                                                   DT::dataTableOutput("explain_score"),
+
                                                    card_header("Your question:"),
                                                    textAreaInput("text_prompt10", "", height = "50px", width = "2000px"),
                                                    numericInput("topn", "Input the top n chunks:","3"),
@@ -26,6 +23,11 @@ questionandanswering =     nav_panel(title = "Question and Answering",
                                        )
                                      ),
                                      fluidRow(
+                                       card(
+                                         h5("Top three chunks for the answer generation:"),
+                                         DT::dataTableOutput("explain_score"),
+                                       ),
+                                       
                                        card(
                                          card_header("Estimated cost calcuations (EUR):"),
                                          fluidRow(

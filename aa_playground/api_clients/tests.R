@@ -2,11 +2,11 @@
 token = ""
 
 # Load PDF file and parse ------------------------------------------------------
-pdf_file = "www/dp.pdf"
+pdf_file = "www/0.pdf"
 txt = pdf_text(pdf_file)
 document = txt[1] # select the page you want to summarize
 document
-
+length(txt)
 # Call Aleph Alpha API ---------------------------------------------------------
 summary = summary(token, document)
 summary
@@ -121,3 +121,53 @@ if (sum(df[,5]) <= 2048) {
   summary = "File too large."
   summary
 }
+
+
+
+
+x = 1
+for (x in 1:length(result)) {
+  token = count_tokens(result[x,1])
+  df[x,3] = cbind(token)
+} 
+df = df[!(df[,3] < 15 | df[,3]==""), ] # Dirty data pre-processing !!!!!!!!!!!!!!!!!!!!!!!!!
+result = df[,1:2]
+
+
+token = input$text_token
+query = input$text_prompt10 
+
+# Data pre-processing step: Parsing PDF input to input format for semantic search
+pdf_file = "www/0.pdf"
+txt = pdf_text(pdf_file)
+#document = txt[1]
+
+df = data.frame(matrix(nrow = 0, ncol = 0)) 
+for (x in 1:nrow(as.data.frame(txt))) {
+  newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) # chunk after each paragraph
+  newrows['page'] <- x # add page number
+  colnames(newrows) = colnames(df)
+  df = rbind(df, newrows)
+} 
+
+colnames(df) <- c("Text_chunk","page")
+
+df = df[!(is.na(df$Text_chunk) | df$Text_chunk==""), ]
+text_chunks = as.list(df)
+
+# Semantic search
+token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0MjcyLCJ0b2tlbl9pZCI6MzIwNn0.kzGqIkR_i58Y73EHVpzlo2wy9hBehja_AVXe9WutlQY"
+query = "Wieviel Euro muss soll die Beklagte zahlen?"
+n = 3
+input$topn
+
+index = semanticsearch(token, as.character(text_chunks$Text_chunk), query, as.integer(n)) 
+test = as.data.frame(index)
+df[,"similarityscore"] = as.data.frame(index)
+# Data post-processing step: Transform LLM result to expected tabular output format
+tbl = data.frame(matrix(nrow = 0, ncol = 0)) 
+
+for (x in 1:length(index)-1) {
+  newvalue = as.integer(index[x])
+  tbl = rbind(tbl,newvalue)
+} 
