@@ -115,7 +115,7 @@ for (x in 3:nrow(df)) {
 typeof(string)
 if (sum(df[,5]) <= 2048) {
   document = as.character(string)
-  summary = summary("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0MjcyLCJ0b2tlbl9pZCI6MzE5NH0.dG7uigQtziQVpLlQdOYUg29TxgwbNl-yYXaU9iC1amA", document)
+  summary = summary("", document)
   summary
 } else {
   summary = "File too large."
@@ -156,7 +156,7 @@ df = df[!(is.na(df$Text_chunk) | df$Text_chunk==""), ]
 text_chunks = as.list(df)
 
 # Semantic search
-token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0MjcyLCJ0b2tlbl9pZCI6MzIwNn0.kzGqIkR_i58Y73EHVpzlo2wy9hBehja_AVXe9WutlQY"
+token = ""
 query = "Wieviel Euro muss soll die Beklagte zahlen?"
 n = 3
 input$topn
@@ -171,3 +171,9 @@ for (x in 1:length(index)-1) {
   newvalue = as.integer(index[x])
   tbl = rbind(tbl,newvalue)
 } 
+
+zip::zip(
+  zipfile = file,
+  files = dir(temp_directory),
+  root = temp_directory
+)

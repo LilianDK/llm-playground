@@ -101,6 +101,12 @@ server <- function(input, output,session) {
      rawoutput2()
   })   
   
+  output$generatedcosts45 <- renderText({  
+    result = rawoutput2()
+    input_cost = count_tokens(result)/1000 * model_price["luminous-supreme-control",1] * task_factor["complete",2]
+  })|>
+    bindEvent(input$button22)
+  
   rawoutput20 <- eventReactive(input$button22,{
     
     token = input$text_token
@@ -165,6 +171,12 @@ server <- function(input, output,session) {
   })|>
     bindEvent(input$button22)
   
+  output$generatedcosts44 <- renderText({  
+    result = rawoutput20()
+    input_cost = count_tokens(result)/1000 * model_price["luminous-supreme-control",1] * task_factor["complete",2]
+  })|>
+    bindEvent(input$button22)
+  
   # Logging of the parameter settings for the prompt report
   parameterframe <- eventReactive(input$button1,{ 
     first_column = c("Model","Max tokens","Best of","Temperature","Top k","Top p","Presency penalty","Frequency penalty")
@@ -223,8 +235,8 @@ server <- function(input, output,session) {
     
     nlg = trimws(qna[[4]])
     
-    input_cost = count_tokens(query)/1000 * model_price["luminous-extended-control",1] * task_factor["complete",1] 
-    + count_tokens(nlg)/1000 * model_price["luminous-extended-control",1] * task_factor["complete",2]
+    input_cost = count_tokens(query)/1000 * model_price["luminous-supreme-control",1] * task_factor["complete",1] 
+    + count_tokens(nlg)/1000 * model_price["luminous-supreme-control",1] * task_factor["complete",2]
     }
     return(list(
       val1 = qna,
@@ -305,6 +317,7 @@ server <- function(input, output,session) {
     pdf_file = glue("{path}/www/0.pdf")
     txt = pdf_text(pdf_file)
     document = txt[1]
+    
     entityextraction = entityextraction(token, document, input$namedentity1, input$namedentity2, input$namedentity3)
     return(entityextraction)
   })
@@ -370,34 +383,44 @@ server <- function(input, output,session) {
   # Output report---------------------------------------------------------------
   
   output$report <- downloadHandler(
-
-    filename = "report.pdf",
-    
-    content = function(file) {
-
-      tempReport <- file.path(tempdir(), "report.Rmd")
-      file.copy("report.Rmd", tempReport, overwrite = TRUE)
-
-      params = list(input_prompt = input$text_prompt,
-                    results = rawoutput(),
-                    model = input$select_model,
-                    max_tokens = as.integer(input$num_maxtoken),
-                    best_of = as.integer(input$slider_bestof),
-                    temperature = input$slider_temperature,
-                    top_k = as.integer(input$slider_topk),
-                    top_p = input$slider_topp,
-                    presence = input$slider_presence,
-                    frequency = input$slider_frequency,
-                    parameterframe = parameterframe()
-      )
+    filename = function(){
+      paste(sys.date(), "_prompt_report", ".zip", sep = "")
+    },
+      content = function(file) {
+        
+        temp_directory <- file.path(tempdir(), as.integer(sys.time()))
+        dir.create(temp_directory)
+        
+        tempReport <- file.path(tempdir(), "report.Rmd")
+        file.copy("report.Rmd", tempReport, overwrite = TRUE)
+        
+        params = list(input_prompt = input$text_prompt,
+                      results = rawoutput(),
+                      model = input$select_model,
+                      max_tokens = as.integer(input$num_maxtoken),
+                      best_of = as.integer(input$slider_bestof),
+                      temperature = input$slider_temperature,
+                      top_k = as.integer(input$slider_topk),
+                      top_p = input$slider_topp,
+                      presence = input$slider_presence,
+                      frequency = input$slider_frequency,
+                      parameterframe = parameterframe()
+        )
+        
+        rmarkdown::render(tempReport, output_file = file,
+                          params = params,
+                          envir = new.env(parent = globalenv())
+        )
       
-      rmarkdown::render(tempReport, output_file = file,
-                        params = params,
-                        envir = new.env(parent = globalenv())
+      writeLines(input$text_prompt, glue("{temp_directory}/prompt.txt"))    
+      
+      zip::zip(
+         zipfile = file,
+         files = dir(temp_directory),
+         root = temp_directory
       )
-    }
-  )
-  
+    })
+
   # Descriptions ---------------------------------------------------------------
   output$descriptions <- renderUI({           
     includeMarkdown(knitr::knit('configurations/descriptions.md'))           

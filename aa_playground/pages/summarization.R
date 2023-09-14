@@ -30,10 +30,18 @@ summarization =     nav_panel(title = "Summarization",
                                       ),
                                     ),
                                 card(
+                                  h6("Est. cost to answer generation in EUR:"),
+                                  textOutput("generatedcosts44")
+                                ),
+                                card(
                                   card_header("Machine generated summary from Audio:"),
                                       shinycssloaders::withSpinner(
                                         textOutput("summary2")
                                       )
+                                ),
+                                card(
+                                  h6("Est. cost to answer generation in EUR:"),
+                                  textOutput("generatedcosts45")
                                 ),
                                 card(min_height = 100,
                                      card_header("Transcription from audio:"),

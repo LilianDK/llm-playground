@@ -24,7 +24,7 @@ questionandanswering =     nav_panel(title = "Question and Answering",
                                      ),
                                      fluidRow(
                                        card(
-                                         h5("Top three chunks for the answer generation:"),
+                                         h5("Top chunks for the answer generation:"),
                                          DT::dataTableOutput("explain_score"),
                                        ),
                                        

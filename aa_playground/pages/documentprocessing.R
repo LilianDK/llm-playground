@@ -12,14 +12,14 @@
 # "button5" for uploading a PDF
 documentprocessing =     nav_panel(title = "Document processing", 
                                      fluidRow(
-                                       column(width = 8,
+                                       column(width = 6,
                                               card(min_height = 100,
                                                    card_header("PDF:"),
                                                    uiOutput("pdfview3"),
                                                    fileInput("file_input3", "upload file ( . pdf format only)", accept = c(".pdf"), multiple = TRUE)
                                               )
                                        ),
-                                       column(width = 4,
+                                       column(width = 6,
                                               card(min_height = 100,
                                                    h5("Machine generated answer:"),
                                                    shinycssloaders::withSpinner(

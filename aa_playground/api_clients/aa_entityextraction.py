@@ -10,7 +10,7 @@ def entityextraction(token, document, namedentity1, namedentity2, namedentity3):
             
   prompt_text = prompt.render(document=document, namedentity1=namedentity1, namedentity2=namedentity2, namedentity3=namedentity3)
   
-  print(prompt_text)
+  print(type(prompt_text))
   client = Client(token)
   request = CompletionRequest(
       prompt=Prompt.from_text(prompt_text),
@@ -18,10 +18,10 @@ def entityextraction(token, document, namedentity1, namedentity2, namedentity3):
       best_of = 2,
       temperature = 0,
       top_k = 0,
-      top_p = 0,
+      top_p = 0.0,
       presence_penalty = 0,
       frequency_penalty = 0.1,
-      repetition_penalties_include_prompt = 0,
+      repetition_penalties_include_prompt = False,
       repetition_penalties_include_completion = True,
   )
   response = client.complete(request, model = "luminous-base-control")
