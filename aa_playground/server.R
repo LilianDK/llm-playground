@@ -350,10 +350,11 @@ server <- function(input, output,session) {
   })
   
   output$text_prompt4 <- renderText({ 
-    estimatedtokenb = 0
-    estimatedtokena = count_tokens(rawoutput())
+    text = rawoutput()
+    estimatedtokens = count_tokens(text)
+    estimatedtokens
   })|>
-    bindEvent(input$button10)
+    bindEvent(input$button1)
   
   # Cost calculation -----------------------------------------------------------
   output$text_prompt5 <- renderText({  
