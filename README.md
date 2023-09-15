@@ -45,8 +45,6 @@ So far if you have an Aleph Alpha account for example and would like to share it
 ## 🎈 Showcases <a name="usage"></a>
 The front-end allows you to use the plain playground just like in the respective account to configure and try out prompt engineering. Further, there is also a functionality that allows you uploading a PDF file for which the selected page will be summarized. Finally, there is also a basic chat functionality to chat with the world knowledge of the llm.
 
-https://github.com/LilianDK/llm-playground/assets/13328959/95576f84-5bc5-49b1-b9ef-175ede4287ce
-
 ## Use case 1: Aleph Alpha Playground Dupe <a name="aaplayground"></a>
 The first use case is the dupe version of the [Aleph Alpha Playround](https://app.aleph-alpha.com/). So far if you have an Aleph Alpha account for example and would like to share it in your organization with many people you would have to share the account credentials with everyone that would give too many rights to everyone. The playground however is only accessible through those extensive credentials. Therefore, this projects provides a front-end to create an abstraction. 
 
