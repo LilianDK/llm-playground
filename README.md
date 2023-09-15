@@ -232,11 +232,9 @@ git clone https://github.com/LilianDK/llm-playground.git
   
 ## ⛏️ TO DO <a name = "todo"></a>
 ## Issues <a name = "issues"></a>
-- For the question and answering part one can select top n chunks to be displayed. However, only top n - 1 chunks will be displayed.
-- Output of the score is not correct.
+- 
   
 ## Features <a name = "features"></a>
-- Calculations everywhere
 - Database for token tracking
 - https://github.com/momper14/alephAlphaClient
 - Audio recording
