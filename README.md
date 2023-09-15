@@ -232,14 +232,14 @@ git clone https://github.com/LilianDK/llm-playground.git
   
 ## ⛏️ TO DO <a name = "todo"></a>
 ## Issues <a name = "issues"></a>
-- 
+- Download prompt report multi-file
   
 ## Features <a name = "features"></a>
 - Database for token tracking
 - https://github.com/momper14/alephAlphaClient
 - Audio recording
 - Hate blocker
-- Improve the summarization prompt (so far just a bad prompt is embedded)
+- Improve the summarization prompt (rejected to be integrated in new application for large text corpus summarization)
 - Included other LLM API, maybe cohere
 - Adding chatbot functionality
 - https://github.com/daattali/shinyscreenshot/
