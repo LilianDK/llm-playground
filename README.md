@@ -243,7 +243,6 @@ git clone https://github.com/LilianDK/llm-playground.git
 - Test framework for document processing
   
 ## Non-functionals <a name = "nfrs"></a>
-- ShinyProxy
 - Tests
 - Prompt Catalogue
 - Websocket (for the audio transcription display on the front-end)
@@ -253,7 +252,7 @@ git clone https://github.com/LilianDK/llm-playground.git
 | Name    | Version | Licence |
 | -------- | ------- | ------- |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [R](https://www.r-project.org/)     | 4.3.1 | GPL-2/GPL-3 |
-| <img src="https://avatars.githubusercontent.com/u/274806?s=48&v=4" width="25"> [shinyproxy](https://github.com/openanalytics/shinyproxy)     | 3.0.2 | Apache-2.0 (scheduled for integration) |
+| <img src="https://avatars.githubusercontent.com/u/274806?s=48&v=4" width="25"> [shinyproxy](https://github.com/openanalytics/shinyproxy)     | 3.0.2 | Apache-2.0 (see: https://github.com/LilianDK/shinyproxy_generative_ai_meadow) |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [Aleph Alpha Client](https://github.com/momper14/alephAlphaClientl)     | None | None (scheduled for integration) |
 | <img src="https://www.r-project.org/Rlogo.png" width="25"> [audio](https://search.r-project.org/CRAN/refmans/audio/html/record.html)  | 0.1.11 | MIT (scheduled for integration) |
 | <img src="https://github.com/bnosac/audio.whisper/blob/master/tools/logo-audio-whisper-x100.png" width="25"> [OpenAI Whisper](https://github.com/bnosac/audio.whisper)     | 0.2.1-1 | MIT |
