@@ -186,7 +186,7 @@ git clone https://github.com/LilianDK/llm-playground.git
 
 For norma docker image builds:
 ```
-docker build -t YOURTAG/PROJECTNAME:latest --push .
+docker build -t YOURTAG/PROJECTNAME:<<VERSION NUMBER>> --push .
 ```
 For multiarch build, that is for diverse operating systems, you need to run following instruction if it is your first time:
 ```
@@ -194,7 +194,7 @@ docker buildx create --name multiarch --driver docker-container --use
 ```
 Then for all builds afterwards and only:
 ```
-docker buildx build --no-cache --platform=linux/amd64,linux/arm64 -t YOURTAG/PROJECTNAME:latest --push --builder multiarch .
+docker buildx build --no-cache --platform=linux/amd64,linux/arm64 -t YOURTAG/PROJECTNAME:<<VERSION NUMBER>> --push --builder multiarch .
 ```
 (approx. more than 5 minutes)
 
