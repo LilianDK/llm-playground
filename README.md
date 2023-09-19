@@ -194,7 +194,7 @@ docker buildx create --name multiarch --driver docker-container --use
 ```
 Then for all builds afterwards and only:
 ```
-docker buildx build --no-cache --platform=linux/amd64,linux/arm64 -t YOURTAG/PROJECTNAME:latest --push .
+docker buildx build --no-cache --platform=linux/amd64,linux/arm64 -t YOURTAG/PROJECTNAME:latest --push --builder multiarch .
 ```
 (approx. more than 5 minutes)
 
