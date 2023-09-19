@@ -58,19 +58,34 @@ Configuration of the chat prompt:
 ```
 
 ## Use case 2: Summarization <a name="summarization"></a>
-The second use case show cases a simple summary of input text. Only the selected page is summarized. 
+The second use case show cases a simple summary of input text derived from https://towardsdatascience.com/summarize-podcast-transcripts-and-long-texts-better-with-nlp-and-ai-e04c89d3b2cb.
 
 You can find the summarization and chat prompt in the "prompts" folder.
 
 Configuration of the summarization prompt:
 
-*This summarization is a very simple one and is intended for rather short text input summarizations (e.g. 1 A4 page). It is not suited for long text input summarizations.* <br />
+*This summarization is a very simple.* <br />
 ```
-### Instruction: Summarize the input.
-### Input:{{document}}
-### Response:
+### Instruction: 
+Generate concise summary from the given text. If the given text does not have real sentences, say "TEXT_CONTAINS_NO_REAL_SENTENCES".
+### Input: 
+Text: {{document}}
+### Response: 
 ```
 
+The summarization comes with a keyword extraction (prompt taken from Aleph Alpha Playground).
+```
+Identify matching keywords for each text.
+###
+Text: The "Whiskey War" is an ongoing conflict between Denmark and Canada over ownership of Hans Island. The dispute began in 1973, when Denmark and Canada reached an agreement on Greenland's borders. However, no settlement regarding Hans Island could be reached by the time the treaty was signed. Since then both countries have used peaceful means - such as planting their national flag or burying liquor - to draw attention to the disagreement.
+Keywords: Conflict, Whiskey War, Denmark, Canada, Treaty, Flag, Liquor
+###
+Text: NASA launched the Discovery program to explore the solar system. It comprises a series of expeditions that have continued from the program's launch in the 1990s to the present day. In the course of the 16 expeditions launched so far, the Moon, Mars, Mercury and Venus, among others, have been explored. Unlike other space programs, the Discovery program places particular emphasis on cost efficiency, true to the motto: "faster, better, cheaper".
+Keywords: Space program, NASA, Expedition, Cost efficiency, Moon, Mars, Mercury, Venus
+###
+Text: {{document}}
+Keywords:
+```
 ## Use case 3: Question and Answering <a name="qna"></a>
 The third use case show cases question and answering (with natural language generation) in which a given input document can be queried. The output is the display of the most suitable n text chunks and a machine generated answer in natural language.
 
