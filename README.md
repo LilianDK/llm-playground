@@ -195,29 +195,23 @@ Then for all builds afterwards and only:
 docker buildx build --no-cache --platform=linux/amd64,linux/arm64 -t YOURTAG/PROJECTNAME:latest --push .
 ```
 (approx. more than 5 minutes)
-```
-docker pull YOURTAG/PROJECTNAME:latest
-docker run -p 3838:3838 --rm YOURTAG/PROJECTNAME:latest
-```
 
-**Step 3: Start the downloaded Docker image (=application)** 
+**Step 3: Start the Docker image (=application)** 
 ```
 docker run -p 3838:3838 --rm schiggy89/llm-playground:latest
 ```
 This step might take a while until it startet.
 
 
-**Step 3: Start a browser and enter "localhost:3838" to open the application** 
-```
-docker run -p 3838:3838 --rm schiggy89/llm-playground:latest
-```
+**Step 4: Start a browser and enter "localhost:3838" to open the application** 
+
 
 Optional if you want to share you image like in the first deployment option:
 ```
 docker push YOURTAG/PROJECTNAME
 ```
 
-**Step 4: Enter your token on the left. You do not need a USER ID (because this is for other enterprise purposes).** 
+**Step 5: Enter your token on the left. You do not need a USER ID (because this is for other enterprise purposes).** 
 
 ## Deployment using R Studio <a name = "deployment3"></a>
 In the following we describe how you can "deploy" this application through R Studio.
