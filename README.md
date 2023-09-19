@@ -152,12 +152,12 @@ In the following we describe how you can deploy this application with a Docker i
 
 **Step 1: Download the Docker image (=application)**
 ```
-docker pull schiggy89/llm-playground:latest
+docker pull schiggy89/llm-playground:<<VERSION NUMBER>>
 ```
 
 **Step 2: Start the downloaded Docker image (=application)** 
 ```
-docker run -p 3838:3838 --rm schiggy89/llm-playground:latest
+docker run -p 3838:3838 --rm schiggy89/llm-playground:<<VERSION NUMBER>>
 ```
 This step might take a while until it startet.
 
@@ -200,7 +200,7 @@ docker buildx build --no-cache --platform=linux/amd64,linux/arm64 -t YOURTAG/PRO
 
 **Step 3: Start the Docker image (=application)** 
 ```
-docker run -p 3838:3838 --rm schiggy89/llm-playground:latest
+docker run -p 3838:3838 --rm schiggy89/llm-playground:<<VERSION NUMBER>>
 ```
 This step might take a while until it startet.
 
