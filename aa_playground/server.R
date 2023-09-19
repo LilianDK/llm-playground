@@ -7,6 +7,8 @@ source_python("api_clients/aa_client.py")
 source_python("api_clients/aa_qna.py")
 source_python("api_clients/aa_semantic_search_inmemo.py")
 source_python("api_clients/aa_summarization.py")
+source_python("api_clients/aa_keywords.py")
+source_python("api_clients/aa_embedding.py")
 source_python("api_clients/aa_entityextraction.py")
 
 options(shiny.maxRequestSize=30*1024^2)
@@ -71,42 +73,185 @@ server <- function(input, output,session) {
   rawoutput2 <- eventReactive(input$button2,{
     
     token = input$text_token
+    maximum_tokens = 100
     
     # processing of PDF file
     path = getwd()
     pdf_file = glue("{path}/www/0.pdf")
     txt = pdf_text(pdf_file)
-    maxpage = length(txt)
-    document = txt[input$selectedPage]
+    txt = trimws(gsub("[\r\n]", "", txt))
+    txt = gsub("\\s+"," ",txt)
+
+    df = data.frame(page="",
+                    tokens=""
+    )
+    x = 1
+    for (x in 1:length(txt)) {
+      tokens = count_tokens(txt[x])
+      tupel = as.integer(c(x, tokens))
+      df = rbind(df, tupel)
+    } 
     
-    if (input$selectedPage <= 0) {
-      return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: Negative page input. Do me a favour please enter something within the range of the document. Thank you!")
-    } else if (input$selectedPage > maxpage)
-    {
-      return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: Out of page range input. Do me a favour please enter something within the range of the document. Thank you!")
-    } else if (length(token) == 0)
-    {
-      return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: No token has been entered. Thank you!")
-    } else if (count_tokens(document)  > 2000 ) 
-    {
-      return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: Likely too much text for this light-weight demo application. The max. tokens that can be processed must be under 2.000. Thank you!")
-    } else 
-    {
-      summary = summary(token, document)
-      return(summary)
+    df = df[-1,]
+    
+    df$tokens <- as.integer(df$tokens)  
+    sumtokeninput <- sum(df[, 'tokens'])
+    
+    if (input$select_chunking == "by paragraph") {
+      
+      # chunk with paragraph
+      sumtable = data.frame(matrix(nrow = 0, ncol = 0)) 
+      for (x in 1:nrow(as.data.frame(txt))) {
+        newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) # chunk after each paragraph
+        sumtable = rbind(sumtable, newrows)
+      } 
+      
+      colnames(sumtable) <- c("Text_chunk")
+      
+      sumtable = sumtable[!(is.na(sumtable$Text_chunk) | sumtable$Text_chunk==""), ]
+      sumtable = as.data.frame(sumtable)
+      text_chunks = as.list(sumtable[,1])
+
+    } else {
+      
+      # chunk with sentences
+      df = data.frame(matrix(nrow = 0, ncol = 0)) 
+      for (x in 1:nrow(as.data.frame(txt))) {
+        newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) # chunk after each paragraph
+        newrows['page'] <- x # add page number
+        colnames(newrows) = colnames(df)
+        df = rbind(df, newrows)
+      } 
+      
+      colnames(df) <- c("Text_chunk","page")
+      
+      df = df[!(is.na(df$Text_chunk) | df$Text_chunk==""), ]
+      text_chunks = as.list(df) 
     }
+      
+    # cluster text chunks
+    vectors = embedding(token, text_chunks) 
+    vectors
+    vectors = matrix(unlist(vectors), ncol = 5120, byrow = TRUE)
+    
+    #fviz_nbclust(vectors, kmeans, method = "wss") +
+    #  geom_vline(xintercept = "", linetype = 2)
+    
+    # execution of summarization procedure
+    set.seed(123)
+    groupsize = 10
+    km.res <- kmeans(vectors, groupsize, nstart = 25)
+    
+    if (input$select_chunking == "by paragraph") {
+      df2 <- cbind(sumtable, cluster = km.res$cluster)
+    } else {
+      df2 <- cbind(windowdf, tokendf, cluster = km.res$cluster) 
+    }  
+    
+      summarydf = data.frame(matrix(nrow = 0, ncol = 0))
+      for (x in 1:groupsize) {
+        group = df2[df2$cluster == x,]
+        group
+        stringtosum = ""
+        for (y in 1:nrow(group)) {
+          stringtosum = paste(stringtosum, group[y,1], sep = " ", collapse = " ")
+        } 
+        tokensize = count_tokens(stringtosum)
+        tokensize
+        print(glue("------------------------------------------------------------Current group is: {x} with tokensize {tokensize}."))
+        if (tokensize > 1500) {
+        print(glue("------------------------------------------------------------Subroutine"))
+          # Part 1
+          part1 = 1
+          stringtosum1 = ""
+          for (x in 1:part1) {
+            stringtosum1 = paste(stringtosum1, group[x,1], sep = " ", collapse = " ")
+            tokensize = count_tokens(stringtosum1)
+          } 
+          document = stringtosum1
+          tokensize1 = count_tokens(stringtosum1)
+          summary1 = summary(token, document, as.integer(maximum_tokens))
+          print(summary1)
+          
+          # Part 2
+          part2 = round(nrow(group)/4)*2
+          stringtosum2 = ""
+          for (x in part1+1:part2) {
+            stringtosum2 = paste(stringtosum2, group[x,1], sep = " ", collapse = " ")
+            tokensize = count_tokens(stringtosum2)
+          } 
+          document = stringtosum2
+          summary2 = summary(token, document, as.integer(maximum_tokens))
+          print(summary2)
+          
+          # Part 3
+          part3 = round(nrow(group)/4)*3+1
+          stringtosum3 = ""
+          for (x in part2+1:part3) {
+            stringtosum3 = paste(stringtosum3, group[x,1], sep = " ", collapse = " ")
+            tokensize = count_tokens(stringtosum3)
+          } 
+          document = stringtosum3
+          summary3 = summary(token, document, as.integer(maximum_tokens))
+          print(summary3)
+          
+          # Part 4
+          part4 = nrow(group)
+          stringtosum4 = ""
+          for (x in part3+1:nrow(group)) {
+            stringtosum4 = paste(stringtosum4, group[x,1], sep = " ", collapse = " ")
+            tokensize = count_tokens(stringtosum4)
+          } 
+          document = stringtosum4
+          summary4 = summary(token, document, as.integer(maximum_tokens))
+          print(summary4)
+          
+          # All
+          document = paste(summary1, summary2, summary3, summary4, sep = " ", collapse = " ")
+          summary = summary(token, document, as.integer(maximum_tokens))
+          print(summary)
+          summarydf = rbind(summarydf, summary)
+        } else {
+        print(glue("------------------------------------------------------------Routine"))
+          document = stringtosum
+          summary = summary(token, document, as.integer(maximum_tokens))
+          print(summary)
+          summarydf = rbind(summarydf, summary)
+        }
+        print(glue("------------------------------------------------------------Next"))
+        colnames(summarydf) = c("Summaries")
+      }
+      
+      for (x in 1:nrow(summarydf)) {
+        stringtosum = paste(stringtosum, summarydf[x,1], sep = " ", collapse = " ")
+        document = stringtosum
+        
+        maximum_tokens = 214
+        summary = summary(token, document, as.integer(maximum_tokens))
+
+        sumtokeninput = sumtokeninput + count_tokens(document)
+        sumtokenoutput = count_tokens(document) + count_tokens(summary)
+        
+      } 
+      document = summary
+      keywords = keywords(token, document)
+      input_cost = sumtokeninput/1000 * model_price["luminous-supreme-control",1] * task_factor["complete",1] 
+      + sumtokenoutput/1000 * model_price["luminous-supreme-control",1] * task_factor["complete",2]
+      
+      input_cost2 = count_tokens(summary)/1000 * model_price["luminous-extended",1] * task_factor["complete",1] 
+      + count_tokens(keywords)/1000 * model_price["luminous-extended",1] * task_factor["complete",2]
+      
+      summary = paste("SUMMARY:", summary, "-----> TOTAL EST. COSTS:", input_cost, "(excl. 1 x embedding and 10 x prompt costs.)", "(Inputtokens:", sumtokeninput, ", Outputtokens:", sumtokenoutput,")",
+                      "-----> KEYWORDS:", keywords, "(est. ",input_cost2, ")" )
+      return(summary)
   })
     
   output$summary <- renderText({ 
-     rawoutput2()
-  })   
-  
-  output$generatedcosts45 <- renderText({  
     result = rawoutput2()
-    input_cost = count_tokens(result)/1000 * model_price["luminous-supreme-control",1] * task_factor["complete",2]
-  })|>
-    bindEvent(input$button22)
-  
+    result = result$val1
+    result 
+  })   
+
   rawoutput20 <- eventReactive(input$button22,{
     
     token = input$text_token
@@ -171,7 +316,7 @@ server <- function(input, output,session) {
   })|>
     bindEvent(input$button22)
   
-  output$generatedcosts44 <- renderText({  
+  output$generatedcosts45 <- renderText({  
     result = rawoutput20()
     input_cost = count_tokens(result)/1000 * model_price["luminous-supreme-control",1] * task_factor["complete",2]
   })|>
@@ -208,6 +353,28 @@ server <- function(input, output,session) {
     colnames(df) <- c("Text_chunk","page")
     
     df = df[!(is.na(df$Text_chunk) | df$Text_chunk==""), ]
+    tokencount = ""
+    for (x in 1:nrow(df)) {
+      test = count_tokens(df[x,1])
+      tokencount = append(tokencount, test)
+      tokencount
+    } 
+    tokencount = as.data.frame(tokencount)
+    tokencount = tokencount[-1,]
+    tokencount = as.data.frame(tokencount)
+    
+    sumcount = c(as.integer(0), as.integer(0))
+    for (x in 1:nrow(tokencount)) {
+      test = as.integer(tokencount[x,1]) + as.integer(tokencount[x+1,1]) + as.integer(tokencount[x+2,1])
+      sumcount = append(sumcount, test)
+    } 
+    sumcount = as.data.frame(sumcount)
+    sumcount = sumcount[-nrow(sumcount),]
+    sumcount = as.data.frame(sumcount)
+
+    df = cbind(df,tokencount,sumcount)
+    df2 = cbind(df,tokencount,sumcount)
+    df = df[,c(1,2)]
     text_chunks = as.list(df)
     
     # Semantic search
@@ -445,8 +612,8 @@ server <- function(input, output,session) {
       )
       x = 1
       for (x in 1:length(txt)) {
-        token = count_tokens(txt[x])
-        tupel = as.integer(c(x, token))
+        tokens = count_tokens(txt[x])
+        tupel = as.integer(c(x, tokens))
         df = rbind(df, tupel)
       } 
       

@@ -11,9 +11,6 @@ length(txt)
 summary = summary(token, document)
 summary
 
-
-
-
 df = data.frame(matrix(nrow = 0, ncol = 0)) 
 for (x in 1:nrow(as.data.frame(txt))) {
   newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) # chunk after each paragraph
@@ -142,18 +139,7 @@ pdf_file = "www/0.pdf"
 txt = pdf_text(pdf_file)
 #document = txt[1]
 
-df = data.frame(matrix(nrow = 0, ncol = 0)) 
-for (x in 1:nrow(as.data.frame(txt))) {
-  newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) # chunk after each paragraph
-  newrows['page'] <- x # add page number
-  colnames(newrows) = colnames(df)
-  df = rbind(df, newrows)
-} 
 
-colnames(df) <- c("Text_chunk","page")
-
-df = df[!(is.na(df$Text_chunk) | df$Text_chunk==""), ]
-text_chunks = as.list(df)
 
 # Semantic search
 token = ""
@@ -177,3 +163,41 @@ zip::zip(
   files = dir(temp_directory),
   root = temp_directory
 )
+
+install.packages("quanteda")
+library(quanteda)
+text_split(c("What. Are. You. Doing????",
+             "She asked 'do you really mean that?' and I said 'yes.'"),
+           units = "sentences", size = 2)
+
+# sample data
+df  = data.frame(Original=c("A > B > C > B > B > A > B > A > C","A > B","A > C > B","A","A > B > D > C"),stringsAsFactors = FALSE)
+for(i in 1:16) df=rbind(df,df)
+
+groups <- function(x)
+{
+  result <- vector("character", length(x)-2)
+  for(k in 1:(length(x)-2) )
+  {
+    result[k] = paste(x[k:(k+2)],collapse="|")
+  }
+  return(paste(result,collapse=" > "))
+}
+
+array1 = lapply(strsplit(df$Original," > "), function(x) if (length(x) == 1) {c(x[1],"NULL","NULL")} else {if (length(x) == 2) {c(x[1:2],"NULL")} else {x}})
+df$modified =  lapply(array1,groups)
+
++###
+  if (input$selectedPage <= 0) {
+    return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: Negative page input. Do me a favour please enter something within the range of the document. Thank you!")
+  } else if () #input$selectedPage > maxpage
+  {
+    return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: Out of page range input. Do me a favour please enter something within the range of the document. Thank you!")
+  } else if () #length(token) == 0
+  {
+    return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: No token has been entered. Thank you!")
+  } else if () #count_tokens(document)  > 2000 
+  {
+    return("YIKES !!! SYSTEM ERROR MESSAGE - NO LLM REQUEST HAS BEEN EXECUTED BECAUSE: Likely too much text for this light-weight demo application. The max. tokens that can be processed must be under 2.000. Thank you!")
+  } else 
+  {

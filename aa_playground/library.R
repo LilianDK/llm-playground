@@ -24,8 +24,9 @@ library(stringr)
 library(audio.whisper)
 library(thematic)
 library(TheOpenAIR)
-library(knitr)
+#library(knitr)
 library(dplyr)
+library(factoextra)
 
 print("START: Loading whisper model-------------------------------------------")
 whispermodel <- whisper("tiny")
@@ -41,7 +42,7 @@ options(shiny.reactlog = TRUE)
 
 Sys.setenv(RETICULATE_PYTHON_ENV = "py_backend")
 
-version <- "3.11"
+version <- "3.11.5"
 
 print("INITIALIZED VIRTUAL PYTHON ENVIRONMENT---------------------------------")
 if (Sys.getenv("RUNS_IN_CONTAINER") == "TRUE") {

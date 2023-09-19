@@ -1,6 +1,11 @@
 # this is the subpage for showcasing summarization with LLMs
 summarization =     nav_panel(title = "Summarization", 
                               fluidRow(
+                                card_header("Disclaimer:"),
+                                h6("This is a showcase. Therefore only the most functional front-end/visual elements are implemented. All prompts are not optimized in any dimension (performance, time, price etc.). They are just 
+                                   good enough to visualize basic concepts behind. This is a showcase - not a productive system."),
+                              ),
+                              fluidRow(
                                 column(width = 6,
                                        card(min_height = 100,
                                             card_header("PDF:"),
@@ -17,7 +22,9 @@ summarization =     nav_panel(title = "Summarization",
                                             h6("Estimated total embedding costs in EUR:"),
                                             textOutput("embeddcost"),
                                             DT::dataTableOutput("df"),
-                                            numericInput("selectedPage", "Select the page:","1"),
+                                            selectInput("select_chunking", "Text preprocessing:",
+                                                        list(`First generation models` = list("by paragraph", "by sentences"))
+                                            ),
                                             actionButton("button2", "Summarize PDF", icon("paper-plane"), style = config_button, width = "230px"),
                                             actionButton("button22", "Summarize Audio", icon("paper-plane"), style = config_button, width = "230px")
                                        )
@@ -29,10 +36,6 @@ summarization =     nav_panel(title = "Summarization",
                                         textOutput("summary")
                                       ),
                                     ),
-                                card(
-                                  h6("Est. cost to answer generation in EUR:"),
-                                  textOutput("generatedcosts44")
-                                ),
                                 card(
                                   card_header("Machine generated summary from Audio:"),
                                       shinycssloaders::withSpinner(
