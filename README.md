@@ -86,6 +86,8 @@ Keywords: Space program, NASA, Expedition, Cost efficiency, Moon, Mars, Mercury,
 Text: {{document}}
 Keywords:
 ```
+![Screenshot 2023-09-19 at 12 01 15](https://github.com/LilianDK/llm-playground/assets/13328959/d384d488-3e17-4c49-a795-85a42cb5fa51)
+
 ## Use case 3: Question and Answering <a name="qna"></a>
 The third use case show cases question and answering (with natural language generation) in which a given input document can be queried. The output is the display of the most suitable n text chunks and a machine generated answer in natural language.
 
