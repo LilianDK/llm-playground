@@ -1,9 +1,11 @@
 # this is the subpage for showcasing summarization with LLMs
 summarization =     nav_panel(title = "Summarization", 
                               fluidRow(
-                                card_header("Disclaimer:"),
-                                h6("This is a showcase. Therefore only the most functional front-end/visual elements are implemented. All prompts are not optimized in any dimension (performance, time, price etc.). They are just 
-                                   good enough to visualize basic concepts behind. This is a showcase - not a productive system."),
+                                card(
+                                  card_header("Disclaimer:"),
+                                  h6("This is a showcase. Therefore only the most functional front-end/visual elements are implemented. All prompts are not optimized in any dimension (performance, time, price etc.). They are just 
+                                   good enough to visualize basic concepts behind. This is a showcase - not a productive system.")
+                                ),
                               ),
                               fluidRow(
                                 column(width = 6,
@@ -23,7 +25,7 @@ summarization =     nav_panel(title = "Summarization",
                                             textOutput("embeddcost"),
                                             DT::dataTableOutput("df"),
                                             selectInput("select_chunking", "Text preprocessing:",
-                                                        list(`First generation models` = list("by paragraph", "by sentences"))
+                                                        list(`First generation models` = list("by page", "by paragraph"))
                                             ),
                                             actionButton("button2", "Summarize PDF", icon("paper-plane"), style = config_button, width = "230px"),
                                             actionButton("button22", "Summarize Audio", icon("paper-plane"), style = config_button, width = "230px")

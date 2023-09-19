@@ -79,8 +79,6 @@ server <- function(input, output,session) {
     path = getwd()
     pdf_file = glue("{path}/www/0.pdf")
     txt = pdf_text(pdf_file)
-    txt = trimws(gsub("[\r\n]", "", txt))
-    txt = gsub("\\s+"," ",txt)
 
     df = data.frame(page="",
                     tokens=""
@@ -97,12 +95,12 @@ server <- function(input, output,session) {
     df$tokens <- as.integer(df$tokens)  
     sumtokeninput <- sum(df[, 'tokens'])
     
-    if (input$select_chunking == "by paragraph") {
+    if (input$select_chunking == "by paragraphs") {
       
-      # chunk with paragraph
+      # chunk with paragraphs
       sumtable = data.frame(matrix(nrow = 0, ncol = 0)) 
       for (x in 1:nrow(as.data.frame(txt))) {
-        newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) # chunk after each paragraph
+        newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) 
         sumtable = rbind(sumtable, newrows)
       } 
       
@@ -114,9 +112,11 @@ server <- function(input, output,session) {
 
     } else {
       
-      # chunk with sentences
+      # chunk with pages
       df = data.frame(matrix(nrow = 0, ncol = 0)) 
       for (x in 1:nrow(as.data.frame(txt))) {
+        txt = trimws(gsub("[\r\n]", "", txt))
+        txt = gsub("\\s+"," ",txt)
         newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) # chunk after each paragraph
         newrows['page'] <- x # add page number
         colnames(newrows) = colnames(df)
@@ -126,7 +126,7 @@ server <- function(input, output,session) {
       colnames(df) <- c("Text_chunk","page")
       
       df = df[!(is.na(df$Text_chunk) | df$Text_chunk==""), ]
-      text_chunks = as.list(df) 
+      text_chunks = as.list(df[,1]) 
     }
       
     # cluster text chunks
@@ -139,13 +139,13 @@ server <- function(input, output,session) {
     
     # execution of summarization procedure
     set.seed(123)
-    groupsize = 10
+    groupsize = length(txt)-3
     km.res <- kmeans(vectors, groupsize, nstart = 25)
     
     if (input$select_chunking == "by paragraph") {
       df2 <- cbind(sumtable, cluster = km.res$cluster)
     } else {
-      df2 <- cbind(windowdf, tokendf, cluster = km.res$cluster) 
+      df2 <- cbind(df, cluster = km.res$cluster) 
     }  
     
       summarydf = data.frame(matrix(nrow = 0, ncol = 0))
