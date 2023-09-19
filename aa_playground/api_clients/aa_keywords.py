@@ -20,7 +20,7 @@ def keywords(token, document):
       top_p = 0,
       presence_penalty = 0,
       frequency_penalty = 0.4,
-      repetition_penalties_include_prompt = False,
+      repetition_penalties_include_prompt = True,
       repetition_penalties_include_completion = True,
   )
   response = client.complete(request, model = "luminous-extended")
