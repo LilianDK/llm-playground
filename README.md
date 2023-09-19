@@ -10,7 +10,7 @@
 
 ---
 
-<p align="center"> In this project some basic front-ends are provivided that enable the webinterface based interaction with an LLM (APIs). Further, some pre-requisites are implemented on the interface design that allow for creating an abstraction layer against an account for an LLM such that multiple user can use the same account but without access to the account itself.
+<p align="center"> In this project some basic front-ends are provivided that enable the webinterface based interaction with an LLM (APIs). Further, some pre-requisites are implemented on the interface design that allow for creating an abstraction layer against an account for an LLM such that multiple user can use the same account but without access to the account itself. We added some functionalities with Aleph Alpha such as Summarization, Document Processing and Question & Answering to the showcase. It is not meant to be beautiful code that can be transferred to production, rather it is meant to see something on the screen other than code.
     <br> 
 </p>
 
