@@ -7,6 +7,7 @@ source_python("api_clients/aa_client.py")
 source_python("api_clients/aa_qna.py")
 source_python("api_clients/aa_semantic_search_inmemo.py")
 source_python("api_clients/aa_summarization.py")
+source_python("api_clients/aa_summarization_guided.py")
 source_python("api_clients/aa_keywords.py")
 source_python("api_clients/aa_embedding.py")
 source_python("api_clients/aa_entityextraction.py")
@@ -17,9 +18,9 @@ server <- function(input, output,session) {
 
   options(scipen=999)
   pagenumbers = 0
-  
-  # Communication with aleph alpha compute center for completion job------------
-
+####################################################################################################################################################################################  
+# Communication with aleph alpha compute center for completion job
+####################################################################################################################################################################################
     rawoutput <- eventReactive(input$button1,{
       token = input$text_token
       prompt = input$text_prompt 
@@ -67,68 +68,69 @@ server <- function(input, output,session) {
       rawoutput()
     })|>
       bindEvent(input$button1)
-
-  # Communication with aleph alpha compute center for summary job---------------
-
+####################################################################################################################################################################################
+# Communication with aleph alpha compute center for summary job 
+####################################################################################################################################################################################
   rawoutput2 <- eventReactive(input$button2,{
-    
+   
     token = input$text_token
-    maximum_tokens = 100
+    maximum_tokens = 170
     
     # processing of PDF file
     path = getwd()
     pdf_file = glue("{path}/www/0.pdf")
     txt = pdf_text(pdf_file)
-
-    df = data.frame(page="",
+    stringtosum = ""
+    for (x in 1:length(txt)) {
+      stringtosum = paste(stringtosum, txt[x], sep = " ", collapse = " ")
+    }    
+    
+    sumtokeninput = count_tokens(stringtosum)
+    
+    dft = data.frame(page="",
                     tokens=""
     )
     x = 1
     for (x in 1:length(txt)) {
       tokens = count_tokens(txt[x])
       tupel = as.integer(c(x, tokens))
-      df = rbind(df, tupel)
+      dft = rbind(dft, tupel)
     } 
     
-    df = df[-1,]
+    dft = dft[-1,]
     
-    df$tokens <- as.integer(df$tokens)  
-    sumtokeninput <- sum(df[, 'tokens'])
-    
-    if (input$select_chunking == "by paragraphs") {
-      
-      # chunk with paragraphs
-      sumtable = data.frame(matrix(nrow = 0, ncol = 0)) 
-      for (x in 1:nrow(as.data.frame(txt))) {
-        newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) 
-        sumtable = rbind(sumtable, newrows)
-      } 
-      
-      colnames(sumtable) <- c("Text_chunk")
-      
-      sumtable = sumtable[!(is.na(sumtable$Text_chunk) | sumtable$Text_chunk==""), ]
-      sumtable = as.data.frame(sumtable)
-      text_chunks = as.list(sumtable[,1])
+    dft$tokens <- as.integer(dft$tokens)  
+    sumtokeninput <- sum(dft[, 'tokens'])
 
-    } else {
+    # chunk text basis
+    string = paste(txt, sep="", collapse="")
+    string = gsub("[\r\n]", "", string) # remove new lines
       
-      # chunk with pages
-      df = data.frame(matrix(nrow = 0, ncol = 0)) 
-      for (x in 1:nrow(as.data.frame(txt))) {
-        txt = trimws(gsub("[\r\n]", "", txt))
-        txt = gsub("\\s+"," ",txt)
-        newrows = as.data.frame(strsplit(txt, "\\n\\n")[[x]]) # chunk after each paragraph
-        newrows['page'] <- x # add page number
-        colnames(newrows) = colnames(df)
-        df = rbind(df, newrows)
-      } 
+    dftext = text_to_sentences(string, split_delim = "\\.")  # only split at "."
+    dftext = as.data.frame(dftext)
       
-      colnames(df) <- c("Text_chunk","page")
+    chunksize = 5
+    overlap = 1
+    cutsize = chunksize - overlap
+    iterations = round(nrow(dftext)/cutsize)-1
       
-      df = df[!(is.na(df$Text_chunk) | df$Text_chunk==""), ]
-      text_chunks = as.list(df[,1]) 
+    df = data.frame(matrix(nrow = 0, ncol = 0))
+      
+    for (x in 1:iterations){
+      chunk = paste(dftext[c(1:chunksize),], sep="", collapse="")
+      df = rbind(df, chunk)
+      dftext = as.data.frame(dftext[-c(1:cutsize), ])
     }
       
+    if (nrow(dftext) > 0) { 
+      chunk = paste(dftext[c(1:nrow(dftext)),], sep="", collapse="")
+      df = rbind(df, chunk)
+    }
+      
+    colnames(df) <- c("Text_chunk")
+      
+    text_chunks = as.list(df[,1]) 
+    
     # cluster text chunks
     vectors = embedding(token, text_chunks) 
     vectors
@@ -139,25 +141,43 @@ server <- function(input, output,session) {
     
     # execution of summarization procedure
     set.seed(123)
-    groupsize = length(txt)-3
+    groupsize = 5
     km.res <- kmeans(vectors, groupsize, nstart = 25)
     
-    if (input$select_chunking == "by paragraph") {
-      df2 <- cbind(sumtable, cluster = km.res$cluster)
-    } else {
-      df2 <- cbind(df, cluster = km.res$cluster) 
-    }  
+    df2 <- cbind(df, cluster = km.res$cluster) 
+
+    presummarydf = data.frame(matrix(nrow = 0, ncol = 0))
+
+    for (x in 1:nrow(df2)) {
+      document = df2[x,1]
+      summary = summary(token, document, as.integer(maximum_tokens))
+      print(summary)
+      presummarydf = rbind(presummarydf, summary)
+
+    }
     
-      summarydf = data.frame(matrix(nrow = 0, ncol = 0))
+    for (x in 1:nrow(presummarydf)) {
+      stringtosum = paste(stringtosum, presummarydf[x,1], sep = " ", collapse = " ")
+    } 
+    sumtokenoutput = 0
+    sumtokenoutput = sumtokenoutput + count_tokens(stringtosum)
+    
+    df2 <- cbind(df2, presummarydf) 
+    colnames(df2) <- c("Text_chunk", "cluster", "Summary")
+      
+    summarydf = data.frame(matrix(nrow = 0, ncol = 0))
       for (x in 1:groupsize) {
+        #x = 1
         group = df2[df2$cluster == x,]
         group
+
         stringtosum = ""
         for (y in 1:nrow(group)) {
-          stringtosum = paste(stringtosum, group[y,1], sep = " ", collapse = " ")
+          stringtosum = paste(stringtosum, group[y,3], sep = " ", collapse = " ")
         } 
         tokensize = count_tokens(stringtosum)
         tokensize
+      
         print(glue("------------------------------------------------------------Current group is: {x} with tokensize {tokensize}."))
         if (tokensize > 1500) {
         print(glue("------------------------------------------------------------Subroutine"))
@@ -225,14 +245,28 @@ server <- function(input, output,session) {
       for (x in 1:nrow(summarydf)) {
         stringtosum = paste(stringtosum, summarydf[x,1], sep = " ", collapse = " ")
         document = stringtosum
-        
-        maximum_tokens = 214
-        summary = summary(token, document, as.integer(maximum_tokens))
+      }        
+      
+    maximum_tokens = 170
+    if (input$select_chunking == "guided summary") {
+      question = "Worum ging es in dem Text?"
+      background = summaryguided(token, document, question, as.integer(maximum_tokens))
+      background
+      
+      question = "Was ist das Ergebnis?"
+      resolution = summaryguided(token, document, question, as.integer(maximum_tokens))
+      resolution
+      
+      summary = glue("{background}{resolution}")
+      sumtokeninput = sumtokeninput + count_tokens(document)
+      sumtokenoutput = sumtokenoutput + count_tokens(document) + count_tokens(background) + count_tokens(resolution) 
+    } else {
+      summary = summary(token, document, as.integer(maximum_tokens))
+      summary
+      sumtokeninput = sumtokeninput + count_tokens(document)
+      sumtokenoutput = sumtokenoutput + count_tokens(document) + count_tokens(summary)
+    }  
 
-        sumtokeninput = sumtokeninput + count_tokens(document)
-        sumtokenoutput = count_tokens(document) + count_tokens(summary)
-        
-      } 
       document = summary
       keywords = keywords(token, document)
       input_cost = sumtokeninput/1000 * model_price["luminous-supreme-control",1] * task_factor["complete",1] 
@@ -241,7 +275,7 @@ server <- function(input, output,session) {
       input_cost2 = count_tokens(summary)/1000 * model_price["luminous-extended",1] * task_factor["complete",1] 
       + count_tokens(keywords)/1000 * model_price["luminous-extended",1] * task_factor["complete",2]
       
-      summary = paste("SUMMARY:", summary, "-----> TOTAL EST. COSTS:", input_cost, "(excl. 1 x embedding and 10 x prompt costs.)", "(Inputtokens:", sumtokeninput, ", Outputtokens:", sumtokenoutput,")",
+      summary = paste("SUMMARY:", summary, "-----> TOTAL EST. COSTS:", input_cost, "(excl. 1 x embedding costs.)", "(Inputtokens:", sumtokeninput, ", Outputtokens:", sumtokenoutput,")",
                       "-----> KEYWORDS:", keywords, "(est. ",input_cost2, ")" )
       return(summary)
   })
@@ -330,8 +364,9 @@ server <- function(input, output,session) {
     df = data.frame("Parameter name" = first_column,
                     "Parameter setting" = second_column)
   })
-  
-  # Communication with aleph alpha compute center for qna job-------------------
+####################################################################################################################################################################################  
+# Communication with aleph alpha compute center for qna job
+#################################################################################################################################################################################### 
   rawoutput9 <- eventReactive(input$button5,{
     
     token = input$text_token
@@ -587,14 +622,15 @@ server <- function(input, output,session) {
          root = temp_directory
       )
     })
-
-  # Descriptions ---------------------------------------------------------------
-  output$descriptions <- renderUI({           
+####################################################################################################################################################################################
+# Descriptions 
+####################################################################################################################################################################################
+    output$descriptions <- renderUI({           
     includeMarkdown(knitr::knit('configurations/descriptions.md'))           
   })
-  
-  # PDF handling ---------------------------------------------------------------
-  
+####################################################################################################################################################################################  
+# PDF handling 
+####################################################################################################################################################################################  
   # Upload PDF and display in summarization
   observe({
     req(input$file_input)
@@ -757,8 +793,5 @@ server <- function(input, output,session) {
     tags$iframe(style="height:800px; width:100%", src="0.pdf")
   })
   })
-  
-  # DAU
 
-  
 }

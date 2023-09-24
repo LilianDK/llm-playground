@@ -27,6 +27,7 @@ library(TheOpenAIR)
 #library(knitr)
 library(dplyr)
 library(factoextra)
+library(ds4psy)
 
 print("START: Loading whisper model-------------------------------------------")
 whispermodel <- whisper("tiny")

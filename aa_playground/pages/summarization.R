@@ -25,7 +25,7 @@ summarization =     nav_panel(title = "Summarization",
                                             textOutput("embeddcost"),
                                             DT::dataTableOutput("df"),
                                             selectInput("select_chunking", "Text preprocessing:",
-                                                        list(`First generation models` = list("by page", "by paragraph"))
+                                                        list(`Summarization` = list("guided summary", "summary"))
                                             ),
                                             actionButton("button2", "Summarize PDF", icon("paper-plane"), style = config_button, width = "230px"),
                                             actionButton("button22", "Summarize Audio", icon("paper-plane"), style = config_button, width = "230px")
