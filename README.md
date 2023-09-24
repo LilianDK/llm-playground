@@ -4,7 +4,7 @@
 
   [![Status](https://img.shields.io/badge/status-active-success.svg)]() 
   [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)]() 
-  [![Version](https://img.shields.io/badge/version-2.0.1-blue.svg?cacheSeconds=2592000)]() 
+  [![Version](https://img.shields.io/badge/version-2.0.3-blue.svg?cacheSeconds=2592000)]() 
 
 </div>
 
