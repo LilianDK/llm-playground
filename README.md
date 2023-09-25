@@ -67,12 +67,21 @@ Configuration of the summarization prompt:
 *This summarization is a very simple.* <br />
 ```
 ### Instruction: 
-Generate concise summary from the given text. If the given text does not have real sentences, say "TEXT_CONTAINS_NO_REAL_SENTENCES".
+Generate concise summary as continuous text from the given text. If the given text does not have real sentences, say "TEXT_CONTAINS_NO_REAL_SENTENCES".
 ### Input: 
+Text: {{document}}
+### Response:
+```
+
+Summarization prompt for guided summary.
+```
+### Instruction: 
+Answer the question using the given text. 
+### Input: 
+Question: {{question}}
 Text: {{document}}
 ### Response: 
 ```
-
 The summarization comes with a keyword extraction (prompt taken from Aleph Alpha Playground).
 ```
 Identify matching keywords for each text.
@@ -128,6 +137,7 @@ body {
 background: linear-gradient(90deg, rgba(6,73,140,1) 28%, rgba(21,146,227,1) 63%, rgba(0,224,255,1) 100%);
 }
 ```
+![Picture 1](https://github.com/LilianDK/llm-playground/assets/13328959/07fa625f-79bf-413e-bbe3-34d2c54a850e)
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
